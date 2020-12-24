@@ -1,27 +1,33 @@
 package com.example.feedproject;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.os.StrictMode;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.SearchView;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
+import java.util.ArrayList;
 
-import java.net.URL;
+public class XmlPullParser_example extends RecyclerView.Adapter<XmlPullParser_example.MyViewHolder> {
 
-public class DogMainActivity extends AppCompatActivity {
-    private static final String TAG = "DogMainActivity";
+    private static final String TAG = "XmlPullParser_example";
+    private ArrayList<XmlPullParser_fsk> mList;
+    private LayoutInflater mInflate;
+    private Context mContext;
 
-    @Override
+    public void MyAdapter(Context context, ArrayList<XmlPullParser_fsk> itmes) {
+        this.mList = itmes;
+        this.mInflate = LayoutInflater.from(context);
+        this.mContext = context;
+    }
+
+    /*@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dog_main);
+        setContentView(R.layout.activity_xml_pull_parser_example);
 
         XmlPullParser_fsk fsk = new XmlPullParser_fsk();
 
@@ -29,10 +35,10 @@ public class DogMainActivity extends AppCompatActivity {
 
         StrictMode.enableDefaults();
 
-        TextView tvFoodCd = (TextView)findViewById(R.id.tv_food_cd); //파싱된 결과확인!
-        TextView tvRegionName = (TextView)findViewById(R.id.tv_region_name); //파싱된 결과확인!
-        TextView tvMonthName = (TextView)findViewById(R.id.tv_month_name); //파싱된 결과확인!
-        TextView tvDeskKor = (TextView)findViewById(R.id.tv_desk_kor); //파싱된 결과확인!
+        TextView tv_food_cd = (TextView)findViewById(R.id.result); //파싱된 결과확인!
+        TextView tv_region_name = (TextView)findViewById(R.id.result); //파싱된 결과확인!
+        TextView tv_month_name = (TextView)findViewById(R.id.result); //파싱된 결과확인!
+        TextView tv_desk_kor = (TextView)findViewById(R.id.result); //파싱된 결과확인!
 
         boolean inNum = false, inFoodCd = false, inRegionName = false, inMonthName = false, inRegionCd = false;
         boolean inMonthCd = false, inGroupName = false, inDeskKor = false, inResearchYear = false, inMakerName = false;
@@ -95,10 +101,10 @@ public class DogMainActivity extends AppCompatActivity {
                         if(parser.getName().equals("SERVING_SIZE")){ //mapy 만나면 내용을 받을수 있게 하자
                             inServingSize = true;
                         }
-                        /*if(parser.getName().equals("message")){ //message 태그를 만나면 에러 출력
-                            status1.setText(status1.getText()+"에러");
+                        if(parser.getName().equals("message")){ //message 태그를 만나면 에러 출력
+                            tv_food_cd.setText(tv_food_cd.getText()+"에러");
                             //여기에 에러코드에 따라 다른 메세지를 출력하도록 할 수 있다.
-                        }*/
+                        }
                         break;
 
                     case XmlPullParser.TEXT://parser가 내용에 접근했을때
@@ -152,51 +158,62 @@ public class DogMainActivity extends AppCompatActivity {
                         }
                         break;
                     case XmlPullParser.END_TAG:
-                        if(parser.getName().equals("NUM")){
-/*                            status1.setText("번호 : "+ fsk.num +"\n 식품코드: "+ fsk.food_cd +"\n 지역명 : " + fsk.region_name
-                                    +"\n 채취월 : " + fsk.month_name +  "\n 지역코드 : " + fsk.region_cd + "\n 채취월코드 : " + fsk.month_cd
-                                    +"\n 식품군 : " + fsk.group_name  + "\n 식품이름 : " + fsk.desk_kor + "\n 조사년도 : " + fsk.research_year
-                                    +"\n 제조사명 : " + fsk.maker_name  +"\n 자료출처 : " + fsk.sub_ref_name +"\n 총내용량 : "+ fsk.serving_size +"\n");*/
-                            tvFoodCd.setText(fsk.food_cd);
-                            tvRegionName.setText(fsk.region_name);
-                            tvMonthName.setText(fsk.month_name);
-                            tvDeskKor.setText(fsk.desk_kor);
+                        if(parser.getName().equals("item")){
+                            tv_food_cd.setText(tv_food_cd.getText()+fsk.food_cd);
                             inNum = false;
                         }
                         break;
                 }
+                Log.i(TAG, fsk.num +"\n 식품코드: "+ fsk.food_cd +"\n 지역명 : " + fsk.region_name
+                        +"\n 채취월 : " + fsk.month_name +  "\n 지역코드 : " + fsk.region_cd + "\n 채취월코드 : " + fsk.month_cd
+                        +"\n 식품군 : " + fsk.group_name  + "\n 식품이름 : " + fsk.desk_kor + "\n 조사년도 : " + fsk.research_year
+                        +"\n 제조사명 : " + fsk.maker_name  +"\n 자료출처 : " + fsk.sub_ref_name +"\n 총내용량 : "+ fsk.serving_size +"\n");
                 parserEvent = parser.next();
             }
         } catch(Exception e){
-            tvFoodCd.setText("에러가..났습니다...");
-        }
-
-        Log.i(TAG, fsk.num +"\n 식품코드: "+ fsk.food_cd +"\n 지역명 : " + fsk.region_name
-                +"\n 채취월 : " + fsk.month_name +  "\n 지역코드 : " + fsk.region_cd + "\n 채취월코드 : " + fsk.month_cd
-                +"\n 식품군 : " + fsk.group_name  + "\n 식품이름 : " + fsk.desk_kor + "\n 조사년도 : " + fsk.research_year
-                +"\n 제조사명 : " + fsk.maker_name  +"\n 자료출처 : " + fsk.sub_ref_name +"\n 총내용량 : "+ fsk.serving_size +"\n");
-    }
-
-    // 앱바 보이기
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.actionbar_actions, menu);
-
-        return true;
-    }
-
-/*    // 액션바 처리
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_search :
-                Log.d(TAG, "서치 액션을 선택했습니다.");
-                // Todo
-                return true;
-            //...
-            //...
-            default:
-                return super.onOptionsItemSelected(item);
+            tv_food_cd.setText(tv_food_cd.getText()+"에러가..났습니다...");
         }
     }*/
+
+    @NonNull
+    @Override
+    public XmlPullParser_example.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = mInflate.inflate(R.layout.activity_xml_pull_parser_example, parent, false);
+        MyViewHolder viewHolder = new MyViewHolder(view);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        //binding
+        holder.food_cd.setText(mList.get(position).food_cd);
+        holder.region_name.setText(mList.get(position).region_name);
+        holder.month_name.setText(mList.get(position).month_name);
+        holder.desk_kor.setText(mList.get(position).desk_kor);
+
+        //Click event
+    }
+
+    @Override
+    public int getItemCount() {
+        return mList.size();
+    }
+
+    //ViewHolder
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView food_cd;
+        public TextView region_name;
+        public TextView month_name;
+        public TextView desk_kor;
+
+        public MyViewHolder(View itemView) {
+            super(itemView);
+
+            food_cd = itemView.findViewById(R.id.tv_food_cd2);
+            region_name = itemView.findViewById(R.id.tv_region_name2);
+            month_name = itemView.findViewById(R.id.tv_month_name2);
+            desk_kor = itemView.findViewById(R.id.tv_desk_kor2);
+
+        }
+    }
 }
