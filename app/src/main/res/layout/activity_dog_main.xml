@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".DogMainActivity">
 
-   <!-- <LinearLayout
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -62,13 +62,14 @@
             android:id="@+id/tv_desk_kor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </LinearLayout>-->
+    </LinearLayout>
 
-    <!--리사이클러뷰
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <!--구분선-->
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical" />-->
+        android:layout_height="2dp"
+        android:layout_marginBottom="16dp"
+        android:layout_centerInParent="true"
+        android:background="#e3e3e3"/>
 
 </LinearLayout>

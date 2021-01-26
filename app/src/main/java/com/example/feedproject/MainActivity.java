@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         bt_cat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), XmlPullParser_example.class);
+                Intent intent = new Intent(getApplicationContext(), DogMainActivity.class);
                 startActivity(intent);
             }
         });
