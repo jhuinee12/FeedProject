@@ -34,6 +34,7 @@ public class DogMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog_main);
 
+<<<<<<< HEAD
         this.InitializeData();
 
         ListView listview = (ListView) findViewById(R.id.listView);
@@ -47,16 +48,25 @@ public class DogMainActivity extends AppCompatActivity {
             }
         });
 
+=======
+>>>>>>> origin/master
         XmlPullParser_fsk fsk = new XmlPullParser_fsk();
 
         Log.d(TAG, "열렸어요.");
 
         StrictMode.enableDefaults();
 
+<<<<<<< HEAD
 /*        TextView tvFoodCd = (TextView)findViewById(R.id.tv_food_cd); //파싱된 결과확인!
         TextView tvRegionName = (TextView)findViewById(R.id.tv_region_name); //파싱된 결과확인!
         TextView tvMonthName = (TextView)findViewById(R.id.tv_month_name); //파싱된 결과확인!
         TextView tvDeskKor = (TextView)findViewById(R.id.tv_desk_kor); //파싱된 결과확인!*/
+=======
+        TextView tvFoodCd = (TextView)findViewById(R.id.tv_food_cd); //파싱된 결과확인!
+        TextView tvRegionName = (TextView)findViewById(R.id.tv_region_name); //파싱된 결과확인!
+        TextView tvMonthName = (TextView)findViewById(R.id.tv_month_name); //파싱된 결과확인!
+        TextView tvDeskKor = (TextView)findViewById(R.id.tv_desk_kor); //파싱된 결과확인!
+>>>>>>> origin/master
 
         boolean inNum = false, inFoodCd = false, inRegionName = false, inMonthName = false, inRegionCd = false;
         boolean inMonthCd = false, inGroupName = false, inDeskKor = false, inResearchYear = false, inMakerName = false;
@@ -119,10 +129,10 @@ public class DogMainActivity extends AppCompatActivity {
                         if(parser.getName().equals("SERVING_SIZE")){ //mapy 만나면 내용을 받을수 있게 하자
                             inServingSize = true;
                         }
-                        if(parser.getName().equals("message")){ //message 태그를 만나면 에러 출력
+                        /*if(parser.getName().equals("message")){ //message 태그를 만나면 에러 출력
                             status1.setText(status1.getText()+"에러");
                             //여기에 에러코드에 따라 다른 메세지를 출력하도록 할 수 있다.
-                        }
+                        }*/
                         break;
 
                     case XmlPullParser.TEXT://parser가 내용에 접근했을때
@@ -177,10 +187,17 @@ public class DogMainActivity extends AppCompatActivity {
                         break;
                     case XmlPullParser.END_TAG:
                         if(parser.getName().equals("NUM")){
+<<<<<<< HEAD
                             status1.setText("번호 : "+ fsk.num +"\n 식품코드: "+ fsk.food_cd +"\n 지역명 : " + fsk.region_name
                                     +"\n 채취월 : " + fsk.month_name +  "\n 지역코드 : " + fsk.region_cd + "\n 채취월코드 : " + fsk.month_cd
                                     +"\n 식품군 : " + fsk.group_name  + "\n 식품이름 : " + fsk.desk_kor + "\n 조사년도 : " + fsk.research_year
                                     +"\n 제조사명 : " + fsk.maker_name  +"\n 자료출처 : " + fsk.sub_ref_name +"\n 총내용량 : "+ fsk.serving_size +"\n");
+=======
+/*                            status1.setText("번호 : "+ fsk.num +"\n 식품코드: "+ fsk.food_cd +"\n 지역명 : " + fsk.region_name
+                                    +"\n 채취월 : " + fsk.month_name +  "\n 지역코드 : " + fsk.region_cd + "\n 채취월코드 : " + fsk.month_cd
+                                    +"\n 식품군 : " + fsk.group_name  + "\n 식품이름 : " + fsk.desk_kor + "\n 조사년도 : " + fsk.research_year
+                                    +"\n 제조사명 : " + fsk.maker_name  +"\n 자료출처 : " + fsk.sub_ref_name +"\n 총내용량 : "+ fsk.serving_size +"\n");*/
+>>>>>>> origin/master
                             tvFoodCd.setText(fsk.food_cd);
                             tvRegionName.setText(fsk.region_name);
                             tvMonthName.setText(fsk.month_name);
@@ -192,13 +209,18 @@ public class DogMainActivity extends AppCompatActivity {
                 parserEvent = parser.next();
             }
         } catch(Exception e){
+<<<<<<< HEAD
             Log.i(TAG, "에러");
             *//*tvFoodCd.setText("에러가..났습니다...");*//*
+=======
+            tvFoodCd.setText("에러가..났습니다...");
+>>>>>>> origin/master
         }
 
         Log.i(TAG, fsk.num +"\n 식품코드: "+ fsk.food_cd +"\n 지역명 : " + fsk.region_name
                 +"\n 채취월 : " + fsk.month_name +  "\n 지역코드 : " + fsk.region_cd + "\n 채취월코드 : " + fsk.month_cd
                 +"\n 식품군 : " + fsk.group_name  + "\n 식품이름 : " + fsk.desk_kor + "\n 조사년도 : " + fsk.research_year
+<<<<<<< HEAD
                 +"\n 제조사명 : " + fsk.maker_name  +"\n 자료출처 : " + fsk.sub_ref_name +"\n 총내용량 : "+ fsk.serving_size +"\n");*/
     }
 
@@ -212,6 +234,9 @@ public class DogMainActivity extends AppCompatActivity {
         DataList.add(new list_item("test6","울랄라6"));
         DataList.add(new list_item("test7","룰루7"));
         DataList.add(new list_item("tt8","울랄라8"));
+=======
+                +"\n 제조사명 : " + fsk.maker_name  +"\n 자료출처 : " + fsk.sub_ref_name +"\n 총내용량 : "+ fsk.serving_size +"\n");
+>>>>>>> origin/master
     }
 
     // 앱바 보이기

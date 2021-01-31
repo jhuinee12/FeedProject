@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button bt_dog;
+    Button bt_dog, bt_cat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,11 +19,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         bt_dog = (Button)findViewById(R.id.btnDog);
+        bt_cat = (Button)findViewById(R.id.btnCat);
 
         bt_dog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), DogMainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        bt_cat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), XmlPullParser_example.class);
                 startActivity(intent);
             }
         });
