@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.feedproject">
-
+    <!-- 인터넷연결 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -11,12 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<<<<<<< HEAD
-        <activity android:name=".list_item" /> <!-- 스플래시 먼저 실행(intent-filter) -->
-=======
-        <activity android:name=".XmlPullParser_example"></activity>
         <!-- 스플래시 먼저 실행(intent-filter) -->
->>>>>>> origin/master
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,11 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".DogMainActivity" />
-<<<<<<< HEAD
-        <activity android:name=".MainActivity" />
-=======
         <activity android:name=".MainActivity"></activity>
->>>>>>> origin/master
     </application>
 
 </manifest>
