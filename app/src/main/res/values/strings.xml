@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FeedProject</string>
+    <item name="tv_link" type="id" />
 </resources>

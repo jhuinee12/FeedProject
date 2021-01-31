@@ -1,28 +1,212 @@
 package com.example.feedproject;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.lang.reflect.Array;
 import java.net.URL;
+import java.text.BreakIterator;
+import java.util.ArrayList;
+
 
 public class DogMainActivity extends AppCompatActivity {
     private static final String TAG = "DogMainActivity";
-    String html = "http://apis.data.go.kr/B553748/FeedCompanyListService/getFeedCompanyList?ServiceKey=R1H3SR71dxA1fXPYN4oF0maMnpTYZx8O6XIkKhuVvaIWYbAw4Jpq4sjzJ%2BYn%2Bkp%2FBDbzLSzrnjDaL0G1i6P%2FYg%3D%3D"
+    //ArrayList<list_item> DataList;
+    MenuItem mSearch;
+    /*@Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dog_main);
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog_main);
+
+        Thread thread = new Thread() {
+            public void run() {
+                ApiExamSearchShop api = new ApiExamSearchShop();
+                api.main();
+            }
+        };
+        thread.start();
+
+        this.InitializeData();
+/*
+        ListView listview = (ListView) findViewById(R.id.listView);
+        final ListViewAdapter adapter = new ListViewAdapter(this,DataList);
+        listview.setAdapter(adapter);
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView parent, View v, int position, long id){
+
+            }
+        });*/
+
+        XmlPullParser_fsk fsk = new XmlPullParser_fsk();
+
+        Log.d(TAG, "열렸어요.");
+
+        StrictMode.enableDefaults();
+
+        TextView tvLink = (TextView)findViewById(R.id.tv_link); //파싱된 결과확인!
+        TextView tvImage = (TextView)findViewById(R.id.tv_image); //파싱된 결과확인!
+        TextView tvMallName = (TextView)findViewById(R.id.tv_mallName); //파싱된 결과확인!
+        TextView tvCategory2 = (TextView)findViewById(R.id.tv_category2); //파싱된 결과확인!
+
+        boolean inTitle = false, inLink = false, inImage = false, inMallName = false, inMaker = false;
+        boolean inBrand = false, inCategory1 = false, inCategory2 = false, inCategory3 = false, inCategory4 = false;
+
+        Log.d(TAG, "트라이로 넘어갈까요?");
+
+        try{
+             //검색 URL부분
+
+            XmlPullParserFactory parserCreator = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = parserCreator.newPullParser();
+
+            parser.setInput(url.openStream(), null);
+
+            int parserEvent = parser.getEventType();
+
+            Log.d(TAG,"파싱시작합니다.");
+
+            while (parserEvent != XmlPullParser.END_DOCUMENT){
+                switch(parserEvent){
+                    case XmlPullParser.START_TAG://parser가 시작 태그를 만나면 실행
+                        if(parser.getName().equals("Title")){ //title 만나면 내용을 받을수 있게 하자
+                            inTitle = true;
+                            Log.d(TAG,"Title.");
+                        }
+                        if(parser.getName().equals("link")){ //address 만나면 내용을 받을수 있게 하자
+                            inLink = true;
+                            Log.d(TAG,"link.");
+                        }
+                        if(parser.getName().equals("image")){ //mapx 만나면 내용을 받을수 있게 하자
+                            inImage = true;
+                        }
+                        if(parser.getName().equals("mallName")){ //mapx 만나면 내용을 받을수 있게 하자
+                            inMallName = true;
+                        }
+                        if(parser.getName().equals("maker")){ //mapy 만나면 내용을 받을수 있게 하자
+                            inMaker = true;
+                        }
+                        if(parser.getName().equals("brand")){ //mapy 만나면 내용을 받을수 있게 하자
+                            inBrand = true;
+                        }
+                        if(parser.getName().equals("category1")){ //mapy 만나면 내용을 받을수 있게 하자
+                            inCategory1 = true;
+                        }
+                        if(parser.getName().equals("category2")){ //mapy 만나면 내용을 받을수 있게 하자
+                            inCategory2 = true;
+                        }
+                        if(parser.getName().equals("category3")){ //mapy 만나면 내용을 받을수 있게 하자
+                            inCategory3 = true;
+                        }
+                        if(parser.getName().equals("category4")){ //mapy 만나면 내용을 받을수 있게 하자
+                            inCategory4 = true;
+                        }
+                        //if(parser.getName().equals("message")){ //message 태그를 만나면 에러 출력
+                          //  status1.setText(status1.getText()+"에러");
+                            //여기에 에러코드에 따라 다른 메세지를 출력하도록 할 수 있다.
+                        }
+                        break;
+
+                    case XmlPullParser.TEXT://parser가 내용에 접근했을때
+                        if(inTitle){ //isTitle이 true일 때 태그의 내용을 저장.
+                            fsk.title = parser.getText();
+                            inTitle = false;
+                        }
+                        if(inLink){ //isAddress이 true일 때 태그의 내용을 저장.
+                            fsk.link = parser.getText();
+                            inLink = false;
+                        }
+                        if(inImage){ //isMapx이 true일 때 태그의 내용을 저장.
+                            fsk.image = parser.getText();
+                            inImage = false;
+                        }
+                        if(inMallName){ //isMapy이 true일 때 태그의 내용을 저장.
+                            fsk.mallName = parser.getText();
+                            inMallName = false;
+                        }
+                        if(inMaker){ //isMapy이 true일 때 태그의 내용을 저장.
+                            fsk.maker = parser.getText();
+                            inMaker = false;
+                        }
+                        if(inBrand){ //isMapy이 true일 때 태그의 내용을 저장.
+                            fsk.brand = parser.getText();
+                            inBrand = false;
+                        }
+                        if(inCategory1){ //isMapy이 true일 때 태그의 내용을 저장.
+                            fsk.category1 = parser.getText();
+                            inCategory1 = false;
+                        }
+                        if(inCategory2){ //isMapy이 true일 때 태그의 내용을 저장.
+                            fsk.category2 = parser.getText();
+                            inCategory2 = false;
+                        }
+                        if(inCategory3){ //isMapy이 true일 때 태그의 내용을 저장.
+                            fsk.category3 = parser.getText();
+                            inCategory3 = false;
+                        }
+                        if(inCategory4){ //isMapy이 true일 때 태그의 내용을 저장.
+                            fsk.category4 = parser.getText();
+                            inCategory4 = false;
+                        }
+                        break;
+                    case XmlPullParser.END_TAG:
+                        if(parser.getName().equals("Title")){
+                            status1.setText("번호 : "+ fsk.title +"\n 링크: "+ fsk.link +"\n 이미지 : " + fsk.image
+                                    +"\n 쇼핑몰상호 : " + fsk.mallName +  "\n 제조사 : " + fsk.maker + "\n 브랜드명 : " + fsk.brand
+                                    +"\n 카테고리대분류 : " + fsk.category1  + "\n 카테고리중분류 : " + fsk.category2 + "\n 카테고리소분류 : " + fsk.category3
+                                    +"\n 카테고리세분류 : " + fsk.category4  +"\n");
+                            tvLink.setText(fsk.link);
+                            tvImage.setText(fsk.image);
+                            tvMallName.setText(fsk.mallName);
+                            tvCategory2.setText(fsk.category2);
+                            inTitle = false;
+                        }
+                        break;
+                }
+                parserEvent = parser.next();
+            }
+        }
+
+        Log.i(TAG, fsk.Title +"번호 : "+ fsk.Title +"\n 링크: "+ fsk.link +"\n 이미지 : " + fsk.image
+                +"\n 쇼핑몰상호 : " + fsk.mallName +  "\n 제조사 : " + fsk.maker + "\n 브랜드명 : " + fsk.brand
+                +"\n 카테고리대분류 : " + fsk.category1  + "\n 카테고리중분류 : " + fsk.category2 + "\n 카테고리소분류 : " + fsk.category3
+                +"\n 카테고리세분류 : " + fsk.category4  +"\n" +"\n");
     }
+
+/*    private void InitializeData() {
+        DataList = new ArrayList<list_item>();
+        DataList.add(new list_item("test1","울랄라1"));
+        DataList.add(new list_item("tt2","룰루2"));
+        DataList.add(new list_item("test3","울랄라3"));
+        DataList.add(new list_item("tt4","울랄라4"));
+        DataList.add(new list_item("test5","룰루5"));
+        DataList.add(new list_item("test6","울랄라6"));
+        DataList.add(new list_item("test7","룰루7"));
+        DataList.add(new list_item("tt8","울랄라8"));
+    }*/
 
     // 앱바 보이기
     @Override

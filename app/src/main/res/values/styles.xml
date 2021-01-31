@@ -10,4 +10,5 @@
         &lt;!&ndash; Customize your theme here. &ndash;&gt;
     </style>-->
     <string name="app_title">너의 사료가 보여</string>
+    <item name="tv_image" type="id" />
 </resources>
