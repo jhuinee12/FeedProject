@@ -5,10 +5,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@android:color/background_dark">
 
-    <ImageButton
-        android:id="@+id/btnFindMe"
+    <ImageButton android:id="@+id/btnFindMe"
         android:layout_width="wrap_content"
-        android:layout_height="330"
+        android:layout_height="324dp"
         android:layout_centerInParent="true"
         android:background="@drawable/logo"></ImageButton>
 
