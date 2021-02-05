@@ -16,6 +16,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jsoup.parser.Tag;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
@@ -26,10 +27,10 @@ import java.util.ArrayList;
 
 
 public class DogMainActivity extends AppCompatActivity {
-    private static final String TAG = "DogMainActivity";
+    /*private static final String TAG = "DogMainActivity";
     //ArrayList<list_item> DataList;
     MenuItem mSearch;
-    /*@Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog_main);
@@ -39,17 +40,8 @@ public class DogMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog_main);
+/*        this.InitializeData();
 
-        Thread thread = new Thread() {
-            public void run() {
-                ApiExamSearchShop api = new ApiExamSearchShop();
-                api.main();
-            }
-        };
-        thread.start();
-
-        this.InitializeData();
-/*
         ListView listview = (ListView) findViewById(R.id.listView);
         final ListViewAdapter adapter = new ListViewAdapter(this,DataList);
         listview.setAdapter(adapter);
@@ -60,7 +52,6 @@ public class DogMainActivity extends AppCompatActivity {
 
             }
         });*/
-
         XmlPullParser_fsk fsk = new XmlPullParser_fsk();
 
         Log.d(TAG, "열렸어요.");
@@ -78,12 +69,22 @@ public class DogMainActivity extends AppCompatActivity {
         Log.d(TAG, "트라이로 넘어갈까요?");
 
         try{
-             //검색 URL부분
+            Thread thread = new Thread() {
+                public void run() {
+                    ApiExamSearchShop api = new ApiExamSearchShop();
+                    api.main();
+                }
+            };
+            thread.start();
+
+            //URL url = new URL("http://openapi.foodsafetykorea.go.kr/api/40ca169d1ddf4764b029/I2790/xml/1/1");
+            // 검색 URL부분
 
             XmlPullParserFactory parserCreator = XmlPullParserFactory.newInstance();
             XmlPullParser parser = parserCreator.newPullParser();
 
-            parser.setInput(url.openStream(), null);
+            //parser.setInput(ApiExamSearchShop.main();)
+            //parser.setInput(url.openStream(), null);
 
             int parserEvent = parser.getEventType();
 
@@ -91,37 +92,37 @@ public class DogMainActivity extends AppCompatActivity {
 
             while (parserEvent != XmlPullParser.END_DOCUMENT){
                 switch(parserEvent){
-                    case XmlPullParser.START_TAG://parser가 시작 태그를 만나면 실행
-                        if(parser.getName().equals("Title")){ //title 만나면 내용을 받을수 있게 하자
+                    case XmlPullParser.START_TAG: //parser가 시작 태그를 만나면 실행
+                        if(parser.getName().equals("TITLE")){ //title 만나면 내용을 받을수 있게 하자
                             inTitle = true;
                             Log.d(TAG,"Title.");
                         }
-                        if(parser.getName().equals("link")){ //address 만나면 내용을 받을수 있게 하자
+                        if(parser.getName().equals("LINK")){ //address 만나면 내용을 받을수 있게 하자
                             inLink = true;
                             Log.d(TAG,"link.");
                         }
-                        if(parser.getName().equals("image")){ //mapx 만나면 내용을 받을수 있게 하자
+                        if(parser.getName().equals("SAMPLING_IMAGE")){ //mapx 만나면 내용을 받을수 있게 하자
                             inImage = true;
                         }
-                        if(parser.getName().equals("mallName")){ //mapx 만나면 내용을 받을수 있게 하자
+                        if(parser.getName().equals("SAMPLING_MALLNAME")){ //mapx 만나면 내용을 받을수 있게 하자
                             inMallName = true;
                         }
-                        if(parser.getName().equals("maker")){ //mapy 만나면 내용을 받을수 있게 하자
+                        if(parser.getName().equals("SAMPLING_MAKER")){ //mapy 만나면 내용을 받을수 있게 하자
                             inMaker = true;
                         }
-                        if(parser.getName().equals("brand")){ //mapy 만나면 내용을 받을수 있게 하자
+                        if(parser.getName().equals("SAMPLING_BRAND")){ //mapy 만나면 내용을 받을수 있게 하자
                             inBrand = true;
                         }
-                        if(parser.getName().equals("category1")){ //mapy 만나면 내용을 받을수 있게 하자
+                        if(parser.getName().equals("CATEGORY1")){ //mapy 만나면 내용을 받을수 있게 하자
                             inCategory1 = true;
                         }
-                        if(parser.getName().equals("category2")){ //mapy 만나면 내용을 받을수 있게 하자
+                        if(parser.getName().equals("CATEGORY2")){ //mapy 만나면 내용을 받을수 있게 하자
                             inCategory2 = true;
                         }
-                        if(parser.getName().equals("category3")){ //mapy 만나면 내용을 받을수 있게 하자
+                        if(parser.getName().equals("CATEGORY3")){ //mapy 만나면 내용을 받을수 있게 하자
                             inCategory3 = true;
                         }
-                        if(parser.getName().equals("category4")){ //mapy 만나면 내용을 받을수 있게 하자
+                        if(parser.getName().equals("CATEGORY4")){ //mapy 만나면 내용을 받을수 있게 하자
                             inCategory4 = true;
                         }
                         //if(parser.getName().equals("message")){ //message 태그를 만나면 에러 출력
@@ -130,7 +131,7 @@ public class DogMainActivity extends AppCompatActivity {
                         }
                         break;
 
-                    case XmlPullParser.TEXT://parser가 내용에 접근했을때
+                case XmlPullParser.TEXT:
                         if(inTitle){ //isTitle이 true일 때 태그의 내용을 저장.
                             fsk.title = parser.getText();
                             inTitle = false;
@@ -172,8 +173,9 @@ public class DogMainActivity extends AppCompatActivity {
                             inCategory4 = false;
                         }
                         break;
-                    case XmlPullParser.END_TAG:
-                        if(parser.getName().equals("Title")){
+
+                case XmlPullParser.END_TAG:
+                        if(parser.getName().equals("TITLE")){
                             status1.setText("번호 : "+ fsk.title +"\n 링크: "+ fsk.link +"\n 이미지 : " + fsk.image
                                     +"\n 쇼핑몰상호 : " + fsk.mallName +  "\n 제조사 : " + fsk.maker + "\n 브랜드명 : " + fsk.brand
                                     +"\n 카테고리대분류 : " + fsk.category1  + "\n 카테고리중분류 : " + fsk.category2 + "\n 카테고리소분류 : " + fsk.category3
@@ -190,10 +192,10 @@ public class DogMainActivity extends AppCompatActivity {
             }
         }
 
-        Log.i(TAG, fsk.Title +"번호 : "+ fsk.Title +"\n 링크: "+ fsk.link +"\n 이미지 : " + fsk.image
+        /*Log.i(TAG, fsk.Title +"번호 : "+ fsk.Title +"\n 링크: "+ fsk.link +"\n 이미지 : " + fsk.image
                 +"\n 쇼핑몰상호 : " + fsk.mallName +  "\n 제조사 : " + fsk.maker + "\n 브랜드명 : " + fsk.brand
                 +"\n 카테고리대분류 : " + fsk.category1  + "\n 카테고리중분류 : " + fsk.category2 + "\n 카테고리소분류 : " + fsk.category3
-                +"\n 카테고리세분류 : " + fsk.category4  +"\n" +"\n");
+                +"\n 카테고리세분류 : " + fsk.category4  +"\n" +"\n");*/
     }
 
 /*    private void InitializeData() {
