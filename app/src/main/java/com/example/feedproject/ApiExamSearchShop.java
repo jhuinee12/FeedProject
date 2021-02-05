@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ApiExamSearchShop extends Thread {
-
+    static String text = null;
     public static void main() {
         String clientId = "Cr4xj10LUdJFUYvg587h"; //애플리케이션 클라이언트 아이디값"
         String clientSecret = "NoptEf1cw7"; //애플리케이션 클라이언트 시크릿값"

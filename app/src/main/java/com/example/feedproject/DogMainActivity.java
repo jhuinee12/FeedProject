@@ -77,14 +77,14 @@ public class DogMainActivity extends AppCompatActivity {
             };
             thread.start();
 
-            //URL url = new URL("http://openapi.foodsafetykorea.go.kr/api/40ca169d1ddf4764b029/I2790/xml/1/1");
+            URL url = new URL("https://openapi.naver.com/v1/search/blog.xml?query="+ApiExamSearchShop.text);
             // 검색 URL부분
 
             XmlPullParserFactory parserCreator = XmlPullParserFactory.newInstance();
             XmlPullParser parser = parserCreator.newPullParser();
 
             //parser.setInput(ApiExamSearchShop.main();)
-            //parser.setInput(url.openStream(), null);
+            parser.setInput(url.openStream(), null);
 
             int parserEvent = parser.getEventType();
 
