@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".PopupActivity" android:theme="@android:style/Theme.Dialog"></activity>
         <!-- 스플래시 먼저 실행(intent-filter) -->
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -20,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".DogMainActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.widget.LinearLayout;
+
+import java.util.ArrayList;
 
 public class list_item extends AppCompatActivity {
 
