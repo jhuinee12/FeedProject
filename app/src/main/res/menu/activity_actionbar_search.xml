@@ -8,6 +8,6 @@
         android:title="Search"
         android:orderInCategory="102"
         app:showAsAction="always"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"/>    <!--검색기능구현-->
+        app:actionViewClass="android.widget.SearchView"/>    <!--검색기능구현-->
 
 </menu>

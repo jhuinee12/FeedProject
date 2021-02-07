@@ -13,20 +13,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import java.lang.reflect.Array;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class DogMainActivity extends AppCompatActivity {
     private static final String TAG = "DogMainActivity";
+    SearchView searchView;
 
     ArrayList<list_item> DataList;
+    ArrayList<list_item> searchList;
+    ListViewAdapter adapter;
     MenuItem mSearch;
 
     @Override
@@ -37,7 +33,7 @@ public class DogMainActivity extends AppCompatActivity {
         this.InitializeData();
 
         ListView listview = (ListView) findViewById(R.id.listView);
-        final ListViewAdapter adapter = new ListViewAdapter(this,DataList);
+        adapter = new ListViewAdapter(this,DataList);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -225,6 +221,9 @@ public class DogMainActivity extends AppCompatActivity {
         DataList.add(new list_item("test6","울랄라6"));
         DataList.add(new list_item("test7","룰루7"));
         DataList.add(new list_item("tt8","울랄라8"));
+
+        searchList = new ArrayList<list_item>();
+        searchList.addAll(DataList);
     }
 //</editor-fold>
 
@@ -253,13 +252,13 @@ public class DogMainActivity extends AppCompatActivity {
             }
         });*/
 
-        getMenuInflater().inflate(R.menu.activity_actionbar_search, menu);
+/*        getMenuInflater().inflate(R.menu.activity_actionbar_search, menu);
 
-/*        SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
+        SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
         //searchView.setMaxWidth(Integer.MAX_VALUE);
-        searchView.setQueryHint("사료명으로 검색합니다.");*/
+        searchView.setQueryHint("사료명으로 검색합니다.");
 
-/*        MenuItem item_like = menu.add(0,0,0,"히든 메뉴");
+        MenuItem item_like = menu.add(0,0,0,"히든 메뉴");
         item_like.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -270,12 +269,56 @@ public class DogMainActivity extends AppCompatActivity {
             }
         });*/
 
-        return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_actionbar_search, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView)menuItem.getActionView();
+        searchView.setQueryHint("사료명으로 검색합니다.");
+        searchView.setOnQueryTextListener(queryTextListener);
+
+        return super.onCreateOptionsMenu(menu);
     }
+
+    private SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String s) {
+            DataList.clear();
+            if (s.length() == 0)
+                DataList.addAll(searchList);
+            else {
+                for (int i=0; i<searchList.size(); i++)
+                {
+                    if(searchList.get(i).name.contains(s))
+                        DataList.add(searchList.get(i));
+                }
+            }
+
+            adapter.notifyDataSetChanged();
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String s) {
+            DataList.clear();
+            if (s.length() == 0)
+                DataList.addAll(searchList);
+            else {
+                for (int i=0; i<searchList.size(); i++)
+                {
+                    if(searchList.get(i).name.contains(s))
+                        DataList.add(searchList.get(i));
+                }
+            }
+
+            adapter.notifyDataSetChanged();
+            return false;
+        }
+    };
 // </editor-fold>
 
     //<editor-fold desc="액션바 처리">
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 //        switch (item.getItemId()) {
 //            case R.id.action_search :
@@ -295,6 +338,6 @@ public class DogMainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 //</editor-fold>
 }
