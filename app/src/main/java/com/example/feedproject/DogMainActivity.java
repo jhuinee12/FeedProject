@@ -230,44 +230,6 @@ public class DogMainActivity extends AppCompatActivity {
     //<editor-fold desc="앱바 보이기">
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /*getMenuInflater().inflate(R.menu.activity_actionbar_search, menu);*/
-
-/*        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_actionbar_search, menu);
-        mSearch = menu.findItem(R.id.action_search);
-
-        SearchView sv = (SearchView)mSearch.getActionView();
-        sv.setSubmitButtonEnabled(true);
-        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                TextView text = (TextView)findViewById(R.id.txtSearch);
-                text.setText(s);
-                return true;
-            }
-        });*/
-
-/*        getMenuInflater().inflate(R.menu.activity_actionbar_search, menu);
-
-        SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
-        //searchView.setMaxWidth(Integer.MAX_VALUE);
-        searchView.setQueryHint("사료명으로 검색합니다.");
-
-        MenuItem item_like = menu.add(0,0,0,"히든 메뉴");
-        item_like.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(getApplicationContext(), DogMainActivity.class);
-                intent.putExtra("Count",12);
-                startActivity(intent);
-                return true;
-            }
-        });*/
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_actionbar_search, menu);
