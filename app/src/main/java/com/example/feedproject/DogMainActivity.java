@@ -1,7 +1,7 @@
 package com.example.feedproject;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.os.AsyncTask;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -13,7 +13,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import org.jsoup.parser.Tag;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.BreakIterator;
 import java.util.ArrayList;
 
 public class DogMainActivity extends AppCompatActivity {
@@ -52,163 +64,151 @@ public class DogMainActivity extends AppCompatActivity {
         Log.d(TAG, "열렸어요.");
 
         StrictMode.enableDefaults();
-// <editor-fold desc="XAML파싱">
-/*        TextView tvFoodCd = (TextView)findViewById(R.id.tv_food_cd); //파싱된 결과확인!
-        TextView tvRegionName = (TextView)findViewById(R.id.tv_region_name); //파싱된 결과확인!
-        TextView tvMonthName = (TextView)findViewById(R.id.tv_month_name); //파싱된 결과확인!
-        TextView tvDeskKor = (TextView)findViewById(R.id.tv_desk_kor); //파싱된 결과확인!
-        TextView tvFoodCd = (TextView)findViewById(R.id.tv_food_cd); //파싱된 결과확인!
-        TextView tvRegionName = (TextView)findViewById(R.id.tv_region_name); //파싱된 결과확인!
-        TextView tvMonthName = (TextView)findViewById(R.id.tv_month_name); //파싱된 결과확인!
-        TextView tvDeskKor = (TextView)findViewById(R.id.tv_desk_kor); //파싱된 결과확인!
 
-        boolean inNum = false, inFoodCd = false, inRegionName = false, inMonthName = false, inRegionCd = false;
-        boolean inMonthCd = false, inGroupName = false, inDeskKor = false, inResearchYear = false, inMakerName = false;
-        boolean inSubRefName = false, inServingSize = false;
+        TextView tvLink = (TextView)findViewById(R.id.tv_link); //파싱된 결과확인!
+        TextView tvImage = (TextView)findViewById(R.id.tv_image); //파싱된 결과확인!
+        TextView tvMallName = (TextView)findViewById(R.id.tv_mallName); //파싱된 결과확인!
+        TextView tvCategory2 = (TextView)findViewById(R.id.tv_category2); //파싱된 결과확인!
+
+        boolean inTitle = false, inLink = false, inImage = false, inMallName = false, inMaker = false;
+        boolean inBrand = false, inCategory1 = false, inCategory2 = false, inCategory3 = false, inCategory4 = false;
 
         Log.d(TAG, "트라이로 넘어갈까요?");
 
-        try{
-            // http://openapi.foodsafetykorea.go.kr/api/인증키/서비스명/요청파일타입/요청시작위치/요청종료위치
-            URL url = new URL("http://openapi.foodsafetykorea.go.kr/api/40ca169d1ddf4764b029/I2790/xml/1/1"
-            ); //검색 URL부분
+        try {
+            Thread thread = new Thread() {
+                public void run() {
+                    ApiExamSearchShop api = new ApiExamSearchShop();
+                    api.main();
+                }
+            };
+            thread.start();
+
+            URL url = new URL("https://openapi.naver.com/v1/search/blog.xml?query=" + ApiExamSearchShop.text);
+            // 검색 URL부분
 
             XmlPullParserFactory parserCreator = XmlPullParserFactory.newInstance();
             XmlPullParser parser = parserCreator.newPullParser();
 
+            //parser.setInput(ApiExamSearchShop.main();)
             parser.setInput(url.openStream(), null);
 
             int parserEvent = parser.getEventType();
 
-            Log.d(TAG,"파싱시작합니다.");
+            Log.d(TAG, "파싱시작합니다.");
 
-            while (parserEvent != XmlPullParser.END_DOCUMENT){
-                switch(parserEvent){
-                    case XmlPullParser.START_TAG://parser가 시작 태그를 만나면 실행
-                        if(parser.getName().equals("NUM")){ //title 만나면 내용을 받을수 있게 하자
-                            inNum = true;
-                            Log.d(TAG,"num.");
+            while (parserEvent != XmlPullParser.END_DOCUMENT) {
+                switch (parserEvent) {
+                    case XmlPullParser.START_TAG: //parser가 시작 태그를 만나면 실행
+                        if (parser.getName().equals("TITLE")) { //title 만나면 내용을 받을수 있게 하자
+                            inTitle = true;
+                            Log.d(TAG, "Title.");
                         }
-                        if(parser.getName().equals("FOOD_CD")){ //address 만나면 내용을 받을수 있게 하자
-                            inFoodCd = true;
-                            Log.d(TAG,"food_cd.");
+                        if (parser.getName().equals("LINK")) { //address 만나면 내용을 받을수 있게 하자
+                            inLink = true;
+                            Log.d(TAG, "link.");
                         }
-                        if(parser.getName().equals("SAMPLING_REGION_NAME")){ //mapx 만나면 내용을 받을수 있게 하자
-                            inRegionName = true;
+                        if (parser.getName().equals("SAMPLING_IMAGE")) { //mapx 만나면 내용을 받을수 있게 하자
+                            inImage = true;
                         }
-                        if(parser.getName().equals("SAMPLING_MONTH_NAME")){ //mapx 만나면 내용을 받을수 있게 하자
-                            inMonthName = true;
+                        if (parser.getName().equals("SAMPLING_MALLNAME")) { //mapx 만나면 내용을 받을수 있게 하자
+                            inMallName = true;
                         }
-                        if(parser.getName().equals("SAMPLING_REGION_CD")){ //mapy 만나면 내용을 받을수 있게 하자
-                            inRegionCd = true;
+                        if (parser.getName().equals("SAMPLING_MAKER")) { //mapy 만나면 내용을 받을수 있게 하자
+                            inMaker = true;
                         }
-                        if(parser.getName().equals("SAMPLING_MONTH_NAME")){ //mapy 만나면 내용을 받을수 있게 하자
-                            inMonthCd = true;
+                        if (parser.getName().equals("SAMPLING_BRAND")) { //mapy 만나면 내용을 받을수 있게 하자
+                            inBrand = true;
                         }
-                        if(parser.getName().equals("GROUP_NAME")){ //mapy 만나면 내용을 받을수 있게 하자
-                            inGroupName = true;
+                        if (parser.getName().equals("CATEGORY1")) { //mapy 만나면 내용을 받을수 있게 하자
+                            inCategory1 = true;
                         }
-                        if(parser.getName().equals("DESC_KOR")){ //mapy 만나면 내용을 받을수 있게 하자
-                            inDeskKor = true;
+                        if (parser.getName().equals("CATEGORY2")) { //mapy 만나면 내용을 받을수 있게 하자
+                            inCategory2 = true;
                         }
-                        if(parser.getName().equals("RESEARCH_YEAR")){ //mapy 만나면 내용을 받을수 있게 하자
-                            inResearchYear = true;
+                        if (parser.getName().equals("CATEGORY3")) { //mapy 만나면 내용을 받을수 있게 하자
+                            inCategory3 = true;
                         }
-                        if(parser.getName().equals("MAKER_NAME")){ //mapy 만나면 내용을 받을수 있게 하자
-                            inMakerName = true;
+                        if (parser.getName().equals("CATEGORY4")) { //mapy 만나면 내용을 받을수 있게 하자
+                            inCategory4 = true;
                         }
-                        if(parser.getName().equals("SUB_REF_NAME")){ //mapy 만나면 내용을 받을수 있게 하자
-                            inSubRefName = true;
+                        //if(parser.getName().equals("message")){ //message 태그를 만나면 에러 출력
+                        //  status1.setText(status1.getText()+"에러");
+                        //여기에 에러코드에 따라 다른 메세지를 출력하도록 할 수 있다.
+                        break;
+                    case XmlPullParser.TEXT:
+                        if (inTitle) { //isTitle이 true일 때 태그의 내용을 저장.
+                            fsk.title = parser.getText();
+                            inTitle = false;
                         }
-                        if(parser.getName().equals("SERVING_SIZE")){ //mapy 만나면 내용을 받을수 있게 하자
-                            inServingSize = true;
+                        if (inLink) { //isAddress이 true일 때 태그의 내용을 저장.
+                            fsk.link = parser.getText();
+                            inLink = false;
                         }
-                        if(parser.getName().equals("message")){ //message 태그를 만나면 에러 출력
-                            status1.setText(status1.getText()+"에러");
-                            //여기에 에러코드에 따라 다른 메세지를 출력하도록 할 수 있다.
+                        if (inImage) { //isMapx이 true일 때 태그의 내용을 저장.
+                            fsk.image = parser.getText();
+                            inImage = false;
+                        }
+                        if (inMallName) { //isMapy이 true일 때 태그의 내용을 저장.
+                            fsk.mallName = parser.getText();
+                            inMallName = false;
+                        }
+                        if (inMaker) { //isMapy이 true일 때 태그의 내용을 저장.
+                            fsk.maker = parser.getText();
+                            inMaker = false;
+                        }
+                        if (inBrand) { //isMapy이 true일 때 태그의 내용을 저장.
+                            fsk.brand = parser.getText();
+                            inBrand = false;
+                        }
+                        if (inCategory1) { //isMapy이 true일 때 태그의 내용을 저장.
+                            fsk.category1 = parser.getText();
+                            inCategory1 = false;
+                        }
+                        if (inCategory2) { //isMapy이 true일 때 태그의 내용을 저장.
+                            fsk.category2 = parser.getText();
+                            inCategory2 = false;
+                        }
+                        if (inCategory3) { //isMapy이 true일 때 태그의 내용을 저장.
+                            fsk.category3 = parser.getText();
+                            inCategory3 = false;
+                        }
+                        if (inCategory4) { //isMapy이 true일 때 태그의 내용을 저장.
+                            fsk.category4 = parser.getText();
+                            inCategory4 = false;
                         }
                         break;
 
-                    case XmlPullParser.TEXT://parser가 내용에 접근했을때
-                        if(inNum){ //isTitle이 true일 때 태그의 내용을 저장.
-                            fsk.num = parser.getText();
-                            inNum = false;
-                        }
-                        if(inFoodCd){ //isAddress이 true일 때 태그의 내용을 저장.
-                            fsk.food_cd = parser.getText();
-                            inFoodCd = false;
-                        }
-                        if(inRegionName){ //isMapx이 true일 때 태그의 내용을 저장.
-                            fsk.region_name = parser.getText();
-                            inRegionName = false;
-                        }
-                        if(inMonthName){ //isMapy이 true일 때 태그의 내용을 저장.
-                            fsk.month_name = parser.getText();
-                            inMonthName = false;
-                        }
-                        if(inRegionCd){ //isMapy이 true일 때 태그의 내용을 저장.
-                            fsk.region_cd = parser.getText();
-                            inRegionCd = false;
-                        }
-                        if(inMonthCd){ //isMapy이 true일 때 태그의 내용을 저장.
-                            fsk.month_cd = parser.getText();
-                            inMonthCd = false;
-                        }
-                        if(inGroupName){ //isMapy이 true일 때 태그의 내용을 저장.
-                            fsk.group_name = parser.getText();
-                            inGroupName = false;
-                        }
-                        if(inDeskKor){ //isMapy이 true일 때 태그의 내용을 저장.
-                            fsk.desk_kor = parser.getText();
-                            inDeskKor = false;
-                        }
-                        if(inResearchYear){ //isMapy이 true일 때 태그의 내용을 저장.
-                            fsk.research_year = parser.getText();
-                            inResearchYear = false;
-                        }
-                        if(inMakerName){ //isMapy이 true일 때 태그의 내용을 저장.
-                            fsk.maker_name = parser.getText();
-                            inMakerName = false;
-                        }
-                        if(inSubRefName){ //isMapy이 true일 때 태그의 내용을 저장.
-                            fsk.sub_ref_name = parser.getText();
-                            inSubRefName = false;
-                        }
-                        if(inServingSize){ //isMapy이 true일 때 태그의 내용을 저장.
-                            fsk.serving_size = parser.getText();
-                            inServingSize = false;
-                        }
-                        break;
                     case XmlPullParser.END_TAG:
-                        if(parser.getName().equals("NUM")){
-                            status1.setText("번호 : "+ fsk.num +"\n 식품코드: "+ fsk.food_cd +"\n 지역명 : " + fsk.region_name
-                                    +"\n 채취월 : " + fsk.month_name +  "\n 지역코드 : " + fsk.region_cd + "\n 채취월코드 : " + fsk.month_cd
-                                    +"\n 식품군 : " + fsk.group_name  + "\n 식품이름 : " + fsk.desk_kor + "\n 조사년도 : " + fsk.research_year
-                                    +"\n 제조사명 : " + fsk.maker_name  +"\n 자료출처 : " + fsk.sub_ref_name +"\n 총내용량 : "+ fsk.serving_size +"\n");
-                            status1.setText("번호 : "+ fsk.num +"\n 식품코드: "+ fsk.food_cd +"\n 지역명 : " + fsk.region_name
-                                    +"\n 채취월 : " + fsk.month_name +  "\n 지역코드 : " + fsk.region_cd + "\n 채취월코드 : " + fsk.month_cd
-                                    +"\n 식품군 : " + fsk.group_name  + "\n 식품이름 : " + fsk.desk_kor + "\n 조사년도 : " + fsk.research_year
-                                    +"\n 제조사명 : " + fsk.maker_name  +"\n 자료출처 : " + fsk.sub_ref_name +"\n 총내용량 : "+ fsk.serving_size +"\n");
-                            tvFoodCd.setText(fsk.food_cd);
-                            tvRegionName.setText(fsk.region_name);
-                            tvMonthName.setText(fsk.month_name);
-                            tvDeskKor.setText(fsk.desk_kor);
-                            inNum = false;
+                        if (parser.getName().equals("TITLE")) {
+                            status1.setText("번호 : " + fsk.title + "\n 링크: " + fsk.link + "\n 이미지 : " + fsk.image
+                                    + "\n 쇼핑몰상호 : " + fsk.mallName + "\n 제조사 : " + fsk.maker + "\n 브랜드명 : " + fsk.brand
+                                    + "\n 카테고리대분류 : " + fsk.category1 + "\n 카테고리중분류 : " + fsk.category2 + "\n 카테고리소분류 : " + fsk.category3
+                                    + "\n 카테고리세분류 : " + fsk.category4 + "\n");
+                            tvLink.setText(fsk.link);
+                            tvImage.setText(fsk.image);
+                            tvMallName.setText(fsk.mallName);
+                            tvCategory2.setText(fsk.category2);
+                            inTitle = false;
                         }
                         break;
                 }
                 parserEvent = parser.next();
             }
-        } catch(Exception e){
-            Log.i(TAG, "에러");
-            tvFoodCd.setText("에러가..났습니다...");
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        Log.i(TAG, fsk.num +"\n 식품코드: "+ fsk.food_cd +"\n 지역명 : " + fsk.region_name
-                +"\n 채취월 : " + fsk.month_name +  "\n 지역코드 : " + fsk.region_cd + "\n 채취월코드 : " + fsk.month_cd
-                +"\n 식품군 : " + fsk.group_name  + "\n 식품이름 : " + fsk.desk_kor + "\n 조사년도 : " + fsk.research_year
-                +"\n 제조사명 : " + fsk.maker_name  +"\n 자료출처 : " + fsk.sub_ref_name +"\n 총내용량 : "+ fsk.serving_size +"\n");*/
-//</editor-fold>
+        Log.i(TAG, fsk.Title +"번호 : "+ fsk.Title +"\n 링크: "+ fsk.link +"\n 이미지 : " + fsk.image
+                +"\n 쇼핑몰상호 : " + fsk.mallName +  "\n 제조사 : " + fsk.maker + "\n 브랜드명 : " + fsk.brand
+                +"\n 카테고리대분류 : " + fsk.category1  + "\n 카테고리중분류 : " + fsk.category2 + "\n 카테고리소분류 : " + fsk.category3
+                +"\n 카테고리세분류 : " + fsk.category4  +"\n" +"\n");
+        //</editor-fold>
+
     }
     //<editor-fold desc="리스트뷰 추가">
     private void InitializeData() {
