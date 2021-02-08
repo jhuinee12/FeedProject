@@ -84,7 +84,7 @@ public class DogMainActivity extends AppCompatActivity {
             };
             thread.start();
 
-            URL url = new URL("https://openapi.naver.com/v1/search/blog.xml?query=" + ApiExamSearchShop.text);
+            URL url = new URL("https://openapi.naver.com/v1/search/datalab.xml?query=" + ApiExamSearchShop.text);
             // 검색 URL부분
 
             XmlPullParserFactory parserCreator = XmlPullParserFactory.newInstance();

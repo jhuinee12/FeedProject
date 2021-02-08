@@ -21,7 +21,7 @@ public class ApiExamSearchShop extends Thread {
         }
 
         //String apiURL = "https://openapi.naver.com/v1/search/blog?query=" + text;    // json 결과
-        String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // xml 결과
+        String apiURL = "https://openapi.naver.com/v1/search/datalab.xml?query="+ text; // xml 결과
 
         Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("X-Naver-Client-Id", clientId);
