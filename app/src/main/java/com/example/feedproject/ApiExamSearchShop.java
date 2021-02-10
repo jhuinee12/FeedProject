@@ -1,5 +1,14 @@
 package com.example.feedproject;
-import java.io.*;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -7,29 +16,31 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ApiExamSearchShop extends Thread {
-    static String text = null;
-    public static void main() {
-        String clientId = "Cr4xj10LUdJFUYvg587h"; //애플리케이션 클라이언트 아이디값"
-        String clientSecret = "NoptEf1cw7"; //애플리케이션 클라이언트 시크릿값"
+public class ApiExamSearchShop extends Thread{
 
-        String text = null;
+    static public String clientId = "Cr4xj10LUdJFUYvg587h"; //애플리케이션 클라이언트 아이디값"
+    static public String clientSecret = "NoptEf1cw7"; //애플리케이션 클라이언트 시크릿값"
+    static public String text;
+    static public String apiURL;
+
+    public static void main() {
         try {
             text = URLEncoder.encode("애견사료", "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("검색어 인코딩 실패",e);
         }
-
-        //String apiURL = "https://openapi.naver.com/v1/search/blog?query=" + text;    // json 결과
-        String apiURL = "https://openapi.naver.com/v1/search/datalab.xml?query="+ text; // xml 결과
+        apiURL = "https://openapi.naver.com/v1/search/shop?query=" + text;    // json 결과
+        //apiURL = "https://openapi.naver.com/v1/search/shop.xml?query="+ text; // xml 결과
 
         Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("X-Naver-Client-Id", clientId);
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         String responseBody = get(apiURL,requestHeaders);
 
+        //parseData(responseBody);
         System.out.println(responseBody);
     }
+
     private static String get(String apiUrl, Map<String, String> requestHeaders){
         HttpURLConnection con = connect(apiUrl);
         try {
@@ -44,6 +55,7 @@ public class ApiExamSearchShop extends Thread {
             } else { // 에러 발생
                 return readBody(con.getErrorStream());
             }
+
         } catch (IOException e) {
             throw new RuntimeException("API 요청과 응답 실패", e);
         } finally {
@@ -79,5 +91,25 @@ public class ApiExamSearchShop extends Thread {
         }
     }
 
+    // <editor-fold desc="json파싱">
+/*    private static void parseData(String responseBody) {
+        String title;
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(responseBody.toString());
+            JSONArray jsonArray = jsonObject.getJSONArray("items");
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject item = jsonArray.getJSONObject(i);
+                title = item.optString("title");
+                System.out.println("TITLE : " + title);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }*/
+    // </editor-fold>
 
 }

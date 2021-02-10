@@ -76,15 +76,10 @@ public class DogMainActivity extends AppCompatActivity {
         Log.d(TAG, "트라이로 넘어갈까요?");
 
         try {
-            Thread thread = new Thread() {
-                public void run() {
-                    ApiExamSearchShop api = new ApiExamSearchShop();
-                    api.main();
-                }
-            };
+            Thread thread = new ApiExamSearchShop();
             thread.start();
 
-            URL url = new URL("https://openapi.naver.com/v1/search/datalab.xml?query=" + ApiExamSearchShop.text);
+            URL url = new URL(ApiExamSearchShop.apiURL);
             // 검색 URL부분
 
             XmlPullParserFactory parserCreator = XmlPullParserFactory.newInstance();
@@ -132,9 +127,9 @@ public class DogMainActivity extends AppCompatActivity {
                         if (parser.getName().equals("CATEGORY4")) { //mapy 만나면 내용을 받을수 있게 하자
                             inCategory4 = true;
                         }
-                        //if(parser.getName().equals("message")){ //message 태그를 만나면 에러 출력
-                        //  status1.setText(status1.getText()+"에러");
-                        //여기에 에러코드에 따라 다른 메세지를 출력하도록 할 수 있다.
+                        //if(parser.getName().equals("message")) { //message 태그를 만나면 에러 출력
+                        //    status1.setText(status1.getText() + "에러");
+                        //}//여기에 에러코드에 따라 다른 메세지를 출력하도록 할 수 있다.
                         break;
                     case XmlPullParser.TEXT:
                         if (inTitle) { //isTitle이 true일 때 태그의 내용을 저장.
@@ -181,10 +176,11 @@ public class DogMainActivity extends AppCompatActivity {
 
                     case XmlPullParser.END_TAG:
                         if (parser.getName().equals("TITLE")) {
-                            status1.setText("번호 : " + fsk.title + "\n 링크: " + fsk.link + "\n 이미지 : " + fsk.image
+                            DataList.add(new list_item(fsk.mallName,fsk.link));
+                            /*status1.setText("제목 : " + fsk.title + "\n 링크: " + fsk.link + "\n 이미지 : " + fsk.image
                                     + "\n 쇼핑몰상호 : " + fsk.mallName + "\n 제조사 : " + fsk.maker + "\n 브랜드명 : " + fsk.brand
                                     + "\n 카테고리대분류 : " + fsk.category1 + "\n 카테고리중분류 : " + fsk.category2 + "\n 카테고리소분류 : " + fsk.category3
-                                    + "\n 카테고리세분류 : " + fsk.category4 + "\n");
+                                    + "\n 카테고리세분류 : " + fsk.category4 + "\n");*/
                             tvLink.setText(fsk.link);
                             tvImage.setText(fsk.image);
                             tvMallName.setText(fsk.mallName);
@@ -203,10 +199,10 @@ public class DogMainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Log.i(TAG, fsk.Title +"번호 : "+ fsk.Title +"\n 링크: "+ fsk.link +"\n 이미지 : " + fsk.image
-                +"\n 쇼핑몰상호 : " + fsk.mallName +  "\n 제조사 : " + fsk.maker + "\n 브랜드명 : " + fsk.brand
-                +"\n 카테고리대분류 : " + fsk.category1  + "\n 카테고리중분류 : " + fsk.category2 + "\n 카테고리소분류 : " + fsk.category3
-                +"\n 카테고리세분류 : " + fsk.category4  +"\n" +"\n");
+        Log.i(TAG, "제목 : " + fsk.title + "\n 링크: " + fsk.link + "\n 이미지 : " + fsk.image
+                + "\n 쇼핑몰상호 : " + fsk.mallName + "\n 제조사 : " + fsk.maker + "\n 브랜드명 : " + fsk.brand
+                + "\n 카테고리대분류 : " + fsk.category1 + "\n 카테고리중분류 : " + fsk.category2 + "\n 카테고리소분류 : " + fsk.category3
+                + "\n 카테고리세분류 : " + fsk.category4 + "\n");
         //</editor-fold>
 
     }
