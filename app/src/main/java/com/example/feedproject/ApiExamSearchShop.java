@@ -1,5 +1,7 @@
 package com.example.feedproject;
 
+import android.os.AsyncTask;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,14 +18,14 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ApiExamSearchShop extends Thread{
+public class ApiExamSearchShop extends Thread {
 
     static public String clientId = "Cr4xj10LUdJFUYvg587h"; //애플리케이션 클라이언트 아이디값"
     static public String clientSecret = "NoptEf1cw7"; //애플리케이션 클라이언트 시크릿값"
     static public String text;
     static public String apiURL;
 
-    public static void main() {
+    public static void main() throws JSONException {
         try {
             text = URLEncoder.encode("애견사료", "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -36,6 +38,11 @@ public class ApiExamSearchShop extends Thread{
         requestHeaders.put("X-Naver-Client-Id", clientId);
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         String responseBody = get(apiURL,requestHeaders);
+        String json = responseBody;
+
+        JSONParser parser = new JSONParser();
+        JSONObject obj = (JSONObject)parser.parse(json);
+        JSONArray item = (JSONArray)obj.get("items");
 
         //parseData(responseBody);
         System.out.println(responseBody);
