@@ -1,5 +1,7 @@
 package com.example.feedproject;
 
+import android.net.TrafficStats;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +24,8 @@ public class ApiExamSearchShop extends Thread{
     static public String clientId = "Cr4xj10LUdJFUYvg587h"; //애플리케이션 클라이언트 아이디값"
     static public String clientSecret = "NoptEf1cw7"; //애플리케이션 클라이언트 시크릿값"
     static public String apiURL;
+
+    private static final int THREAD_ID = 10000;
 
     public static void main() {
 
@@ -78,6 +82,8 @@ public class ApiExamSearchShop extends Thread{
 
     private static String readBody(InputStream body){
         InputStreamReader streamReader = new InputStreamReader(body);
+
+        TrafficStats.setThreadStatsTag(THREAD_ID);
 
         try (BufferedReader lineReader = new BufferedReader(streamReader)) {
             StringBuilder responseBody = new StringBuilder();

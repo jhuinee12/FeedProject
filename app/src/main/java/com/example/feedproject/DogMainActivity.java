@@ -57,16 +57,8 @@ public class DogMainActivity extends AppCompatActivity {
             }
         });
 
-        XmlPullParser_fsk fsk = new XmlPullParser_fsk();
-
         Log.d(TAG, "열렸어요.");
-
-        StrictMode.enableDefaults();
 // <editor-fold desc="XAML파싱">
-        StrictMode.enableDefaults();
-
-        boolean inTitle = false, inLink = false, inImage = false, inMallName = false, inMaker = false;
-        boolean inBrand = false, inCategory1 = false, inCategory2 = false, inCategory3 = false, inCategory4 = false;
 
         Log.d(TAG, "트라이로 넘어갈까요?");
 
