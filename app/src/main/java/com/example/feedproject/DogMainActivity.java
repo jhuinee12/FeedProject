@@ -2,36 +2,22 @@ package com.example.feedproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.StrictMode;
+import android.content.*;
+import android.os.*;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.SearchView;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import android.view.*;
+import android.widget.*;
 import java.util.ArrayList;
+import static com.example.feedproject.ApiExamSearchShop.DataList;
 
 public class DogMainActivity extends AppCompatActivity {
     private static final String TAG = "DogMainActivity";
     SearchView searchView;
+    ListView listview;
 
-    ArrayList<list_item> DataList = new ArrayList<list_item>();
+    //ArrayList<list_item> DataList = new ArrayList<list_item>();
     ArrayList<list_item> searchList;
     ListViewAdapter adapter;
-    MenuItem mSearch;
 
     public static Context mContext;
 
@@ -40,28 +26,13 @@ public class DogMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog_main);
 
+        //ApiExamSearchShop apiExamSearchShop = new ApiExamSearchShop();
         mContext = this;
-
-        ListView listview = (ListView) findViewById(R.id.listView);
-        adapter = new ListViewAdapter(this,DataList);
-        listview.setAdapter(adapter);
-
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView parent, View v, int position, long id){
-                String value = "TestPopup \n TestPopup \n TestPopup \n TestPopup \n TestPopup \n TestPopup \n TestPopup \n TestPopup \n TestPopup \n TestPopup \n TestPopup \n TestPopup";
-                Log.d(TAG, "선택했어요.");
-                Intent intent = new Intent(DogMainActivity.this, PopupActivity.class);
-                intent.putExtra("data", value);
-                startActivityForResult(intent, 1);
-            }
-        });
 
         Log.d(TAG, "열렸어요.");
 // <editor-fold desc="XAML파싱">
 
         Log.d(TAG, "트라이로 넘어갈까요?");
-
         try {
             Thread td = new Thread() {
                 public void run() {
@@ -70,44 +41,40 @@ public class DogMainActivity extends AppCompatActivity {
                 }
             };
             td.start();
-
-            URL url = new URL(ApiExamSearchShop.apiURL);
-            // 검색 URL부분
-
-            XmlPullParserFactory parserCreator = XmlPullParserFactory.newInstance();
-            XmlPullParser parser = parserCreator.newPullParser();
-
-            //parser.setInput(ApiExamSearchShop.main();)
-            parser.setInput(url.openStream(), null);
-
-            int parserEvent = parser.getEventType();
-
-            Log.d(TAG, "파싱시작합니다.");
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 //</editor-fold>
     }
     //<editor-fold desc="리스트뷰 추가">
-    public void InitializeData(String title, String desc) {
-/*        DataList = new ArrayList<list_item>();
-        DataList.add(new list_item("test1","울랄라1"));
-        DataList.add(new list_item("tt2","룰루2"));
-        DataList.add(new list_item("test3","울랄라3"));
-        DataList.add(new list_item("tt4","울랄라4"));
-        DataList.add(new list_item("test5","룰루5"));
-        DataList.add(new list_item("test6","울랄라6"));
-        DataList.add(new list_item("test7","룰루7"));
-        DataList.add(new list_item("tt8","울랄라8"));*/
-
-        DataList.add(new list_item(title, desc));
-
+    public void InitializeData() {
         searchList = new ArrayList<list_item>();
         searchList.addAll(DataList);
+        ListViewUpdate();
+    }
+
+    public void ListViewUpdate() {
+        Log.d(TAG, "리스트뷰 뿌릴게요");
+        Handler mHandler = new Handler(Looper.getMainLooper());
+        mHandler.postDelayed(new Runnable() {
+            public void run(){
+                adapter = new ListViewAdapter(mContext, DataList);
+                listview.setAdapter(adapter);
+            }
+        },0);
+        Log.d(TAG, "리스트뷰 뿌렸어요");
+
+        listview = (ListView) findViewById(R.id.listView);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView parent, View v, int position, long id){
+                String value = parent.getAdapter().getItem(position).toString();
+                Log.d(TAG, "선택했어요.");
+                Intent intent = new Intent(DogMainActivity.this, PopupActivity.class);
+                intent.putExtra("data", value);
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 //</editor-fold>
 
@@ -136,10 +103,14 @@ public class DogMainActivity extends AppCompatActivity {
                 for (int i=0; i<searchList.size(); i++)
                 {
                     if(searchList.get(i).name.contains(s))
+                    {
+                        Log.d(TAG, DataList.toString());
                         DataList.add(searchList.get(i));
+                    }
                 }
             }
 
+            //InitializeData();
             adapter.notifyDataSetChanged();
             return false;
         }
@@ -153,11 +124,16 @@ public class DogMainActivity extends AppCompatActivity {
                 for (int i=0; i<searchList.size(); i++)
                 {
                     if(searchList.get(i).name.contains(s))
+                    {
+                        Log.d(TAG, DataList.toString());
                         DataList.add(searchList.get(i));
+                    }
                 }
             }
 
+            //InitializeData();
             adapter.notifyDataSetChanged();
+            //ListViewUpdate();
             return false;
         }
     };

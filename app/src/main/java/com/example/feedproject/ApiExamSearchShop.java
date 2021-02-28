@@ -1,6 +1,11 @@
 package com.example.feedproject;
 
+import android.content.Context;
 import android.net.TrafficStats;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.ListView;
+import android.widget.SearchView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,8 +29,10 @@ public class ApiExamSearchShop extends Thread{
     static public String clientId = "Cr4xj10LUdJFUYvg587h"; //애플리케이션 클라이언트 아이디값"
     static public String clientSecret = "NoptEf1cw7"; //애플리케이션 클라이언트 시크릿값"
     static public String apiURL;
+    static public ArrayList<list_item> DataList;
 
     private static final int THREAD_ID = 10000;
+    private static Context mContext = null;
 
     public static void main() {
 
@@ -45,7 +52,7 @@ public class ApiExamSearchShop extends Thread{
         String responseBody = get(apiURL,requestHeaders);
 
         parseData(responseBody);
-
+        ((DogMainActivity)DogMainActivity.mContext).InitializeData();
     }
 
     private static String get(String apiUrl, Map<String, String> requestHeaders){
@@ -100,6 +107,7 @@ public class ApiExamSearchShop extends Thread{
     }
 
     private static void parseData(String responseBody) {
+        DataList = new ArrayList<list_item>();
         String title;
         String desc;
         JSONObject jsonObject = null;
@@ -111,9 +119,19 @@ public class ApiExamSearchShop extends Thread{
                 JSONObject item = jsonArray.getJSONObject(i);
                 title = item.optString("title");
                 desc = item.optString("link");
-                System.out.println("TITLE : " + title);
-                System.out.println("DESC : " + desc);
-                //((DogMainActivity)DogMainActivity.mContext).InitializeData(title,desc);
+                final String finalTitle = title;
+                final String finalDesc = desc;
+                System.out.println("TITLE : " + finalTitle);
+                System.out.println("DESC : " + finalDesc);
+                Handler mHandler = new Handler(Looper.getMainLooper());
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        DataList.add(new list_item(finalTitle, finalDesc));
+                        //((DogMainActivity)DogMainActivity.mContext).InitializeData(finalTitle, finalDesc);
+                    }
+                }, 0);
+                //((DogMainActivity)DogMainActivity.mContext).DataList.add(new list_item(title, desc));
             }
 
         } catch (JSONException e) {
