@@ -2,6 +2,7 @@ package com.example.feedproject;
 
 import android.content.Context;
 import android.net.TrafficStats;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.ListView;
@@ -108,6 +109,7 @@ public class ApiExamSearchShop extends Thread{
 
     private static void parseData(String responseBody) {
         DataList = new ArrayList<list_item>();
+        String image;
         String title;
         String desc;
         JSONObject jsonObject = null;
@@ -117,17 +119,20 @@ public class ApiExamSearchShop extends Thread{
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
+                image = item.optString("image");
                 title = item.optString("title");
                 desc = item.optString("link");
+                final String finalImage = image;
                 final String finalTitle = title;
                 final String finalDesc = desc;
                 System.out.println("TITLE : " + finalTitle);
                 System.out.println("DESC : " + finalDesc);
+                System.out.println("IMAGE : " + finalImage);
                 Handler mHandler = new Handler(Looper.getMainLooper());
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        DataList.add(new list_item(finalTitle, finalDesc));
+                        DataList.add(new list_item(finalImage, finalTitle, finalDesc));
                         //((DogMainActivity)DogMainActivity.mContext).InitializeData(finalTitle, finalDesc);
                     }
                 }, 0);

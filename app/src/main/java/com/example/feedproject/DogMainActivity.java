@@ -26,11 +26,9 @@ public class DogMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog_main);
 
-        //ApiExamSearchShop apiExamSearchShop = new ApiExamSearchShop();
         mContext = this;
 
         Log.d(TAG, "열렸어요.");
-// <editor-fold desc="XAML파싱">
 
         Log.d(TAG, "트라이로 넘어갈까요?");
         try {
@@ -93,7 +91,7 @@ public class DogMainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+    public SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String s) {
             DataList.clear();

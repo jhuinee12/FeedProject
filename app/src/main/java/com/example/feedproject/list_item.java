@@ -2,15 +2,12 @@ package com.example.feedproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.widget.LinearLayout;
-
-import java.util.ArrayList;
 
 public class list_item extends AppCompatActivity {
 
-    //public int icon;
+    public String image;
     public String name;
     public String desc;
 
@@ -20,8 +17,8 @@ public class list_item extends AppCompatActivity {
         setContentView(R.layout.activity_list_item);
     }
 
-    public list_item(String name, String desc) {
-        //this.icon = icon;
+    public list_item(String image, String name, String desc) {
+        this.image = image;
         this.name = name;
         this.desc = desc;
     }
@@ -34,5 +31,10 @@ public class list_item extends AppCompatActivity {
     public String getDesc()
     {
         return this.desc;
+    }
+
+    public String getImage()
+    {
+        return this.image;
     }
 }
