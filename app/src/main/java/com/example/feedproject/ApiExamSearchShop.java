@@ -44,8 +44,8 @@ public class ApiExamSearchShop extends Thread{
             throw new RuntimeException("검색어 인코딩 실패",e);
         }
 
-        apiURL = "https://openapi.naver.com/v1/search/shop?query=" + text;    // json 결과
-        //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // xml 결과
+        apiURL = "https://openapi.naver.com/v1/search/shop?query=" + text+ "&display=20&start=1";    // json 결과
+        //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text ; // xml 결과
 
         Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("X-Naver-Client-Id", clientId);

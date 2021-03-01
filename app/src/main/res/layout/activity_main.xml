@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#222C63"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/holo_blue_light">
 
-    <Button
-        android:id="@+id/btnCat"
-        android:layout_width="match_parent"
-        android:layout_height="291dp"
-        android:background="@drawable/cat" />
 
-    <Button
-        android:id="@+id/btnDog"
-        android:layout_width="match_parent"
-        android:layout_height="291dp"
-        android:background="@drawable/dog" />
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="600dp"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btnCat"
+            android:layout_width="wrap_content"
+            android:layout_height="291dp"
+            android:background="@drawable/cat"></Button>
+
+        <Button
+            android:id="@+id/btnDog"
+            android:layout_width="wrap_content"
+            android:layout_height="291dp"
+            android:layout_below="@id/btnCat"
+            android:background="@drawable/dog"></Button>
+    </LinearLayout>
+
+</RelativeLayout>
