@@ -5,15 +5,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class PopupActivity extends Activity {
 
-    TextView txtText;
+    TextView txtName;
+    TextView txtDesc;
+    ImageView imageView;
+    Bitmap bitmap;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +37,44 @@ public class PopupActivity extends Activity {
         setContentView(R.layout.activity_popup);
 
         //UI 객체생성
-        txtText = (TextView)findViewById(R.id.txtPopup);
+        txtName = (TextView)findViewById(R.id.txtName);
+        txtDesc = (TextView)findViewById(R.id.txtDesc);
+        imageView = (ImageView)findViewById(R.id.imageView1);
 
         //데이터 가져오기
-        Intent intent = getIntent();
-        String data = intent.getStringExtra("data");
-        txtText.setText(data);
+        intent = getIntent();
+        txtName.setText(intent.getStringExtra("name"));
+        txtDesc.setText(intent.getStringExtra("desc"));
+
+
+        Thread mThread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(intent.getStringExtra("image"));
+
+                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                    conn.setDoInput(true);
+                    conn.connect();
+
+                    InputStream is = conn.getInputStream();
+                    bitmap = BitmapFactory.decodeStream(is);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        mThread.start();
+
+        try {
+            mThread.join();
+            imageView.setImageBitmap(bitmap);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     //확인 버튼 클릭
     public void mOnClose(View v){

@@ -66,10 +66,14 @@ public class DogMainActivity extends AppCompatActivity {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView parent, View v, int position, long id){
-                String value = parent.getAdapter().getItem(position).toString();
+                String Name = DataList.get(position).getName();
+                String Desc = DataList.get(position).getDesc();
+                String Image = DataList.get(position).getImage();
                 Log.d(TAG, "선택했어요.");
                 Intent intent = new Intent(DogMainActivity.this, PopupActivity.class);
-                intent.putExtra("data", value);
+                intent.putExtra("name", Name);
+                intent.putExtra("desc", Desc);
+                intent.putExtra("image", Image);
                 startActivityForResult(intent, 1);
             }
         });

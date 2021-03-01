@@ -11,7 +11,7 @@
         android:id="@+id/imageView1"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="@drawable/cat"
+        android:background="@android:color/transparent"
         android:scaleType="centerInside" />
 
     <LinearLayout
