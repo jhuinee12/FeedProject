@@ -24,18 +24,19 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import static com.example.feedproject.DogMainActivity.DataList;
+import static com.example.feedproject.DogMainActivity.searchList;
 
 public class ApiExamSearchShop extends Thread{
 
     static public String clientId = "Cr4xj10LUdJFUYvg587h"; //애플리케이션 클라이언트 아이디값"
     static public String clientSecret = "NoptEf1cw7"; //애플리케이션 클라이언트 시크릿값"
     static public String apiURL;
-    static public ArrayList<list_item> DataList;
 
     private static final int THREAD_ID = 10000;
     private static Context mContext = null;
 
-    public static void main() {
+    public static void main(int page) {
 
         String text = null;
         try {
@@ -44,7 +45,7 @@ public class ApiExamSearchShop extends Thread{
             throw new RuntimeException("검색어 인코딩 실패",e);
         }
 
-        apiURL = "https://openapi.naver.com/v1/search/shop?query=" + text+ "&display=20&start=1";    // json 결과
+        apiURL = "https://openapi.naver.com/v1/search/shop?query=" + text+ "&display=100&start=1";    // json 결과
         //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text ; // xml 결과
 
         Map<String, String> requestHeaders = new HashMap<>();
@@ -52,8 +53,8 @@ public class ApiExamSearchShop extends Thread{
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         String responseBody = get(apiURL,requestHeaders);
 
-        parseData(responseBody);
-        ((DogMainActivity)DogMainActivity.mContext).InitializeData();
+        parseData(responseBody, (page+1)*10);
+        ((DogMainActivity)DogMainActivity.mContext).ListViewUpdate();
     }
 
     private static String get(String apiUrl, Map<String, String> requestHeaders){
@@ -107,8 +108,7 @@ public class ApiExamSearchShop extends Thread{
         }
     }
 
-    private static void parseData(String responseBody) {
-        DataList = new ArrayList<list_item>();
+    private static void parseData(String responseBody, int count) {
         String image;
         String title;
         String desc;
@@ -117,7 +117,7 @@ public class ApiExamSearchShop extends Thread{
             jsonObject = new JSONObject(responseBody.toString());
             JSONArray jsonArray = jsonObject.getJSONArray("items");
 
-            for (int i = 0; i < jsonArray.length(); i++) {
+            for (int i = count-10; i < count; i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
                 image = item.optString("image");
                 title = item.optString("title");
@@ -133,6 +133,7 @@ public class ApiExamSearchShop extends Thread{
                     @Override
                     public void run() {
                         DataList.add(new list_item(finalImage, finalTitle, finalDesc));
+                        searchList.add(new list_item(finalImage, finalTitle, finalDesc));
                         //((DogMainActivity)DogMainActivity.mContext).InitializeData(finalTitle, finalDesc);
                     }
                 }, 0);
