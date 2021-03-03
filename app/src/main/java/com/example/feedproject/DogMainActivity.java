@@ -104,6 +104,7 @@ public class DogMainActivity extends AppCompatActivity {
 
 //<editor-fold desc="리스트뷰 스크롤 이벤트">
     public void listViewScroll() {
+        ApiExamSearchShop.start += 10;
         listview.setOnScrollListener(new AbsListView.OnScrollListener(){
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {

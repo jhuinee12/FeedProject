@@ -36,6 +36,8 @@ public class ApiExamSearchShop extends Thread{
     private static final int THREAD_ID = 10000;
     private static Context mContext = null;
 
+    public static int start = 1;    // api 파싱 시 데이터 start 위치
+
     public static void main(int page) {
 
         String text = null;
@@ -45,7 +47,7 @@ public class ApiExamSearchShop extends Thread{
             throw new RuntimeException("검색어 인코딩 실패",e);
         }
 
-        apiURL = "https://openapi.naver.com/v1/search/shop?query=" + text+ "&display=100&start=1";    // json 결과
+        apiURL = "https://openapi.naver.com/v1/search/shop?query=" + text+ "&display=10&start=" + start;    // json 결과
         //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text ; // xml 결과
 
         Map<String, String> requestHeaders = new HashMap<>();
@@ -53,7 +55,7 @@ public class ApiExamSearchShop extends Thread{
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         String responseBody = get(apiURL,requestHeaders);
 
-        parseData(responseBody, (page+1)*10);
+        parseData(responseBody);
         if (page == 0)
             ((DogMainActivity)DogMainActivity.mContext).ListViewLoad();
         else
@@ -111,7 +113,7 @@ public class ApiExamSearchShop extends Thread{
         }
     }
 
-    private static void parseData(String responseBody, int count) {
+    private static void parseData(String responseBody) {
         String image;
         String title;
         String desc;
@@ -120,7 +122,7 @@ public class ApiExamSearchShop extends Thread{
             jsonObject = new JSONObject(responseBody.toString());
             JSONArray jsonArray = jsonObject.getJSONArray("items");
 
-            for (int i = count-10; i < count; i++) {
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
                 image = item.optString("image");
                 title = item.optString("title");
