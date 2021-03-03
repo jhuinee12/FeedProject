@@ -1,5 +1,6 @@
 <resources>
     <!-- Base application theme. -->
+    <!--nav drawer 생성을 위한 액션바 숨기기-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">#657071</item>
         <item name="colorPrimaryDark">#000000</item>

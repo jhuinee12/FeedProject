@@ -1,6 +1,15 @@
 package com.example.feedproject;
 
+//--액션바 삭제 후 툴바(0303)-------
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import android.view.MenuItem;
+//--------------------------------
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.*;
 import android.os.*;
@@ -26,11 +35,28 @@ public class DogMainActivity extends AppCompatActivity {
     static public ArrayList<list_item> DataList;
     static public ArrayList<list_item> searchList;
 
+    private DrawerLayout drawerLayout;
+    private View drawerView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog_main);
 
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerView = (View) findViewById(R.id.drawerView);
+        drawerLayout.openDrawer(drawerView);
+        drawerLayout.setDrawerListener(listener);
+
+/* 액션바 삭제 후 툴바(0303)
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
+        actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
+        actionBar.setHomeAsUpIndicator(R.drawable.menu_refresh); //뒤로가기 버튼 이미지 지정
+*/
         DataList = new ArrayList<list_item>();
         searchList = new ArrayList<list_item>();
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
@@ -60,6 +86,33 @@ public class DogMainActivity extends AppCompatActivity {
         }
 //</editor-fold>
     }
+
+    @Override
+    //액션바 삭제 후 툴바(0303)
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{ // 뒤로가기 버튼 눌렀을 때
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
+        @Override
+        public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+        }
+        @Override
+        public void onDrawerOpened(@NonNull View drawerView) {
+        }
+        @Override
+        public void onDrawerClosed(@NonNull View drawerView) {
+        }
+        @Override
+        public void onDrawerStateChanged(int newState) {
+        }
+    };
 
     public void ListViewLoad() {    // 페이지를 처음 갱신할 경우 실행
         Log.d(TAG, "리스트뷰 뿌릴게요");
