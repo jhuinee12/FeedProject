@@ -54,7 +54,10 @@ public class ApiExamSearchShop extends Thread{
         String responseBody = get(apiURL,requestHeaders);
 
         parseData(responseBody, (page+1)*10);
-        ((DogMainActivity)DogMainActivity.mContext).ListViewUpdate();
+        if (page == 0)
+            ((DogMainActivity)DogMainActivity.mContext).ListViewLoad();
+        else
+            ((DogMainActivity)DogMainActivity.mContext).ListViewUpdate();
     }
 
     private static String get(String apiUrl, Map<String, String> requestHeaders){

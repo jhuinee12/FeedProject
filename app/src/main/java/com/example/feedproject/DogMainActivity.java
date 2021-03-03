@@ -22,6 +22,7 @@ public class DogMainActivity extends AppCompatActivity {
     ListViewAdapter adapter;
 
     public static Context mContext;
+    public static int SearchCount = 0;
     static public ArrayList<list_item> DataList;
     static public ArrayList<list_item> searchList;
 
@@ -33,6 +34,7 @@ public class DogMainActivity extends AppCompatActivity {
         DataList = new ArrayList<list_item>();
         searchList = new ArrayList<list_item>();
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
+        listview = (ListView) findViewById(R.id.listView);
         mContext = this;
 
         if (!isConnected(mContext))
@@ -59,52 +61,7 @@ public class DogMainActivity extends AppCompatActivity {
 //</editor-fold>
     }
 
-    private void getItem() {
-        // 리스트에 다음 데이터를 입력할 동안에 이 메소드가 또 호출되지 않도록 mLockListView 를 true로 설정한다.
-        mLockListView = true;
-
-        // 다음 20개의 데이터를 불러와서 리스트에 저장한다.
-        for(int i = 0; i < 20; i++){
-            DataList.add(searchList.get(i));
-        }
-
-        // 1초 뒤 프로그레스바를 감추고 데이터를 갱신하고, 중복 로딩 체크하는 Lock을 했던 mLockListView변수를 풀어준다.
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                page++;
-                adapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
-                mLockListView = false;
-            }
-        },1000);
-    }
-
-    public void tdApi() {
-        Log.d(TAG, "열렸어요.");
-
-        Log.d(TAG, "트라이로 넘어갈까요?");
-        try {
-            Thread td = new Thread() {
-                public void run() {
-                    ApiExamSearchShop api = new ApiExamSearchShop();
-                    api.main(page);
-                }
-            };
-            td.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //<editor-fold desc="리스트뷰 추가">
-/*    public void InitializeData() {
-        searchList = new ArrayList<list_item>();
-        searchList.addAll(DataList);
-        ListViewUpdate();
-    }*/
-
-    public void ListViewUpdate() {
+    public void ListViewLoad() {    // 페이지를 처음 갱신할 경우 실행
         Log.d(TAG, "리스트뷰 뿌릴게요");
         Handler mHandler = new Handler(Looper.getMainLooper());
         mHandler.postDelayed(new Runnable() {
@@ -115,7 +72,19 @@ public class DogMainActivity extends AppCompatActivity {
         },0);
         Log.d(TAG, "리스트뷰 뿌렸어요");
 
-        listview = (ListView) findViewById(R.id.listView);
+        listViewClick();
+        listViewScroll();
+    }
+
+    public void ListViewUpdate()    // 페이지가 1 이상일 경우 실행
+    {
+        listViewClick();
+        listViewScroll();
+        adapter.notifyDataSetChanged();
+    }
+
+//<editor-fold desc="리스트뷰 스크롤 이벤트">
+    public void listViewClick() {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView parent, View v, int position, long id){
@@ -130,7 +99,11 @@ public class DogMainActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
+    }
+// </editor-fold>
 
+//<editor-fold desc="리스트뷰 스크롤 이벤트">
+    public void listViewScroll() {
         listview.setOnScrollListener(new AbsListView.OnScrollListener(){
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -182,7 +155,7 @@ public class DogMainActivity extends AppCompatActivity {
             }
         });
     }
-//</editor-fold>
+// </editor-fold>
 
     //<editor-fold desc="앱바 보이기">
     @Override
@@ -203,9 +176,12 @@ public class DogMainActivity extends AppCompatActivity {
         @Override
         public boolean onQueryTextSubmit(String s) {
             DataList.clear();
-            if (s.length() == 0)
+            if (s.length() == 0) {
                 DataList.addAll(searchList);
+                mLockListView = false;
+            }
             else {
+                mLockListView = true;
                 for (int i=0; i<searchList.size(); i++)
                 {
                     if(searchList.get(i).name.contains(s))
@@ -216,7 +192,6 @@ public class DogMainActivity extends AppCompatActivity {
                 }
             }
 
-            //InitializeData();
             adapter.notifyDataSetChanged();
             return false;
         }
@@ -224,9 +199,13 @@ public class DogMainActivity extends AppCompatActivity {
         @Override
         public boolean onQueryTextChange(String s) {
             DataList.clear();
-            if (s.length() == 0)
+            if (s.length() == 0) {
+                mLockListView = false;
                 DataList.addAll(searchList);
+                SearchCount = 0;
+            }
             else {
+                mLockListView = true;
                 for (int i=0; i<searchList.size(); i++)
                 {
                     if(searchList.get(i).name.contains(s))
@@ -237,9 +216,7 @@ public class DogMainActivity extends AppCompatActivity {
                 }
             }
 
-            //InitializeData();
             adapter.notifyDataSetChanged();
-            //ListViewUpdate();
             return false;
         }
     };
