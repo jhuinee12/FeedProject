@@ -1,9 +1,9 @@
 package com.example.feedproject;
 
-//--액션바 삭제 후 툴바(0303)-------
-import android.os.Bundle;
 
+import android.os.Bundle;
 import androidx.annotation.NonNull;
+//--액션바 삭제 후 툴바(0303)-------
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
@@ -29,27 +29,20 @@ public class DogMainActivity extends AppCompatActivity {
     private boolean lastItemVisibleFlag = false;
     private int page = 0;
     ListViewAdapter adapter;
+    private DrawerLayout drawerLayout;
+    private View drawerView;
 
     public static Context mContext;
     public static int SearchCount = 0;
     static public ArrayList<list_item> DataList;
     static public ArrayList<list_item> searchList;
 
-    private DrawerLayout drawerLayout;
-    private View drawerView;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog_main);
-
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerView = (View) findViewById(R.id.drawerView);
-        drawerLayout.openDrawer(drawerView);
-        drawerLayout.setDrawerListener(listener);
-
-/* 액션바 삭제 후 툴바(0303)
+//액션바 삭제 후 툴바(0303)
+/*
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -84,11 +77,13 @@ public class DogMainActivity extends AppCompatActivity {
 
             progressBar.setVisibility(View.GONE);
         }
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerView = (View) findViewById(R.id.drawerView);
+        drawerLayout.setDrawerListener(listener);
 //</editor-fold>
     }
-
-    @Override
-    //액션바 삭제 후 툴바(0303)
+//액션바 삭제 후 툴바(0303)
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:{ // 뒤로가기 버튼 눌렀을 때
@@ -97,6 +92,10 @@ public class DogMainActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }*/
+
+    public void setDrawerLayout(DrawerLayout drawerLayout) {
+        this.drawerLayout = drawerLayout;
     }
 
     DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
@@ -105,6 +104,7 @@ public class DogMainActivity extends AppCompatActivity {
         }
         @Override
         public void onDrawerOpened(@NonNull View drawerView) {
+            drawerLayout.openDrawer(drawerView);
         }
         @Override
         public void onDrawerClosed(@NonNull View drawerView) {
@@ -129,8 +129,7 @@ public class DogMainActivity extends AppCompatActivity {
         listViewScroll();
     }
 
-    public void ListViewUpdate()    // 페이지가 1 이상일 경우 실행
-    {
+    public void ListViewUpdate(){    // 페이지가 1 이상일 경우 실행
         listViewClick();
         listViewScroll();
         adapter.notifyDataSetChanged();

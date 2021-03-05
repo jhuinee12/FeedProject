@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         bt_cat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), DogMainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), CatMainActivity.class);
                 startActivity(intent);
             }
         });
