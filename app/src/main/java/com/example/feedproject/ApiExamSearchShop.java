@@ -114,35 +114,59 @@ public class ApiExamSearchShop extends Thread{
     }
 
     private static void parseData(String responseBody) {
-        String image;
-        String title;
-        String desc;
+        String image, title, maker, brand, desc, category1, category2, category3, category4;
         JSONObject jsonObject = null;
+        int i=0;
         try {
             jsonObject = new JSONObject(responseBody.toString());
             JSONArray jsonArray = jsonObject.getJSONArray("items");
 
-            for (int i = 0; i < jsonArray.length(); i++) {
+            while (i != 10) {
                 JSONObject item = jsonArray.getJSONObject(i);
                 image = item.optString("image");
-                title = item.optString("title");
-                desc = item.optString("link");
+                brand = item.optString("brand");
+                category1 = item.optString("category1");
+                category2 = item.optString("category2");
+                category3 = item.optString("category3");
+                category4 = item.optString("category4");
+                // title = item.optString("title");
+                // desc = item.optString("link");
                 final String finalImage = image;
-                final String finalTitle = title;
-                final String finalDesc = desc;
+                //final String finalTitle = title.replace("<b>","").replace("</b>","");
+                final String finalTitle = brand;
+                final String finalDesc = category1 + " > " + category2 + " > " + category3 + " > " + category4;
+                final Boolean[] check = {true};
                 System.out.println("TITLE : " + finalTitle);
                 System.out.println("DESC : " + finalDesc);
                 System.out.println("IMAGE : " + finalImage);
+
+                if (searchList.size() != 0)
+                {
+                    for (int j=0; j<searchList.size(); j++)
+                    {
+                        System.out.println(j+"번째 searchList : " + searchList.get(j).getName());
+                        if (searchList.get(j).getName() == finalTitle) {
+                            check[0] = false;
+                            i--;
+                            break;
+                        }
+                    }
+                }
+
                 Handler mHandler = new Handler(Looper.getMainLooper());
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        DataList.add(new list_item(finalImage, finalTitle, finalDesc));
-                        searchList.add(new list_item(finalImage, finalTitle, finalDesc));
+                        if (check[0] == true)
+                        {
+                            DataList.add(new list_item(finalImage, finalTitle, finalDesc));
+                            searchList.add(new list_item(finalImage, finalTitle, finalDesc));
+                        }
                         //((DogMainActivity)DogMainActivity.mContext).InitializeData(finalTitle, finalDesc);
                     }
                 }, 0);
                 //((DogMainActivity)DogMainActivity.mContext).DataList.add(new list_item(title, desc));
+                i++;
             }
 
         } catch (JSONException e) {

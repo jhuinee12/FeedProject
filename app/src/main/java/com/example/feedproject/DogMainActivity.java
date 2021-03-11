@@ -1,6 +1,5 @@
 package com.example.feedproject;
 
-
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 //--액션바 삭제 후 툴바(0303)-------
@@ -29,20 +28,21 @@ public class DogMainActivity extends AppCompatActivity {
     private boolean lastItemVisibleFlag = false;
     private int page = 0;
     ListViewAdapter adapter;
-    private DrawerLayout drawerLayout;
-    private View drawerView;
 
     public static Context mContext;
     public static int SearchCount = 0;
     static public ArrayList<list_item> DataList;
     static public ArrayList<list_item> searchList;
 
+    private DrawerLayout drawerLayout;
+    private View drawerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog_main);
-//액션바 삭제 후 툴바(0303)
-/*
+
+/* 액션바 삭제 후 툴바(0303)
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -82,9 +82,10 @@ public class DogMainActivity extends AppCompatActivity {
         drawerLayout.setDrawerListener(listener);
 //</editor-fold>
     }
-//액션바 삭제 후 툴바(0303)
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+
+    @Override
+    //액션바 삭제 후 툴바(0303)
+/*    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:{ // 뒤로가기 버튼 눌렀을 때
                 finish();
@@ -104,7 +105,6 @@ public class DogMainActivity extends AppCompatActivity {
         }
         @Override
         public void onDrawerOpened(@NonNull View drawerView) {
-            drawerLayout.openDrawer(drawerView);
         }
         @Override
         public void onDrawerClosed(@NonNull View drawerView) {
@@ -129,7 +129,8 @@ public class DogMainActivity extends AppCompatActivity {
         listViewScroll();
     }
 
-    public void ListViewUpdate(){    // 페이지가 1 이상일 경우 실행
+    public void ListViewUpdate()    // 페이지가 1 이상일 경우 실행
+    {
         listViewClick();
         listViewScroll();
         adapter.notifyDataSetChanged();
