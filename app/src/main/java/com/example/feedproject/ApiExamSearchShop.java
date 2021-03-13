@@ -24,8 +24,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import static com.example.feedproject.DogMainActivity.DataList;
-import static com.example.feedproject.DogMainActivity.searchList;
+import static com.example.feedproject.MainActivity.DataList;
+import static com.example.feedproject.MainActivity.searchList;
 
 public class ApiExamSearchShop extends Thread{
 
@@ -38,11 +38,11 @@ public class ApiExamSearchShop extends Thread{
 
     public static int start = 1;    // api 파싱 시 데이터 start 위치
 
-    public static void main(int page) {
+    public static void main(int page, String keyword) {
 
         String text = null;
         try {
-            text = URLEncoder.encode("애견사료", "UTF-8");
+            text = URLEncoder.encode(keyword, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("검색어 인코딩 실패",e);
         }
@@ -57,9 +57,27 @@ public class ApiExamSearchShop extends Thread{
 
         parseData(responseBody);
         if (page == 0)
-            ((DogMainActivity)DogMainActivity.mContext).ListViewLoad();
+        {
+            if (MainActivity.val == "dog")
+            {
+                ((DogMainActivity)DogMainActivity.mContext).ListViewLoad();
+            }
+            else if (MainActivity.val == "cat")
+            {
+                ((CatMainActivity)CatMainActivity.mContext).ListViewLoad();
+            }
+        }
         else
-            ((DogMainActivity)DogMainActivity.mContext).ListViewUpdate();
+        {
+            if (MainActivity.val == "dog")
+            {
+                ((DogMainActivity)DogMainActivity.mContext).ListViewUpdate();
+            }
+            else if (MainActivity.val == "cat")
+            {
+                ((CatMainActivity)CatMainActivity.mContext).ListViewUpdate();
+            }
+        }
     }
 
     private static String get(String apiUrl, Map<String, String> requestHeaders){

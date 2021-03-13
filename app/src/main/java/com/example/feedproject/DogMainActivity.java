@@ -17,6 +17,9 @@ import android.view.*;
 import android.widget.*;
 import java.util.*;
 
+import static com.example.feedproject.MainActivity.DataList;
+import static com.example.feedproject.MainActivity.searchList;
+
 import static com.example.feedproject.MainActivity.isConnected;
 
 public class DogMainActivity extends AppCompatActivity {
@@ -27,12 +30,12 @@ public class DogMainActivity extends AppCompatActivity {
     private boolean mLockListView = false;
     private boolean lastItemVisibleFlag = false;
     private int page = 0;
+    public static int val = 0;
     ListViewAdapter adapter;
 
     public static Context mContext;
     public static int SearchCount = 0;
-    static public ArrayList<list_item> DataList;
-    static public ArrayList<list_item> searchList;
+    public static String keyword = "강아지 사료";
 
     private DrawerLayout drawerLayout;
     private View drawerView;
@@ -50,11 +53,19 @@ public class DogMainActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
         actionBar.setHomeAsUpIndicator(R.drawable.menu_refresh); //뒤로가기 버튼 이미지 지정
 */
-        DataList = new ArrayList<list_item>();
-        searchList = new ArrayList<list_item>();
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
         listview = (ListView) findViewById(R.id.listView);
         mContext = this;
+
+        switch (val)
+        {
+            case 1:
+                keyword = "강아지 사료";
+                break;
+            case 2:
+                keyword = "강아지 간식";
+                break;
+        }
 
         if (!isConnected(mContext))
         {
@@ -67,7 +78,7 @@ public class DogMainActivity extends AppCompatActivity {
                 Thread td = new Thread() {
                     public void run() {
                         ApiExamSearchShop api = new ApiExamSearchShop();
-                        api.main(page);
+                        api.main(page, keyword);
                     }
                 };
                 td.start();
@@ -83,9 +94,9 @@ public class DogMainActivity extends AppCompatActivity {
 //</editor-fold>
     }
 
-    @Override
+/*     @Override
     //액션바 삭제 후 툴바(0303)
-/*    public boolean onOptionsItemSelected(MenuItem item) {
+   public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:{ // 뒤로가기 버튼 눌렀을 때
                 finish();
@@ -179,7 +190,7 @@ public class DogMainActivity extends AppCompatActivity {
                         Thread td = new Thread() {
                             public void run() {
                                 ApiExamSearchShop api = new ApiExamSearchShop();
-                                api.main(page);
+                                api.main(page, keyword);
                             }
                         };
                         td.start();

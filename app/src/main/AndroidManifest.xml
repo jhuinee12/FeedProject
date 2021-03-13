@@ -10,12 +10,14 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_feedproject"
         android:label="@string/app_title"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_feedproject_round"
         android:supportsRtl="true"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme">
-        <activity android:name=".PopupActivity" android:theme="@android:style/Theme.Dialog"></activity>
-        <!-- 스플래시 먼저 실행(intent-filter) -->
+        <activity android:name=".CatMainActivity"></activity>
+        <activity
+            android:name=".PopupActivity"
+            android:theme="@android:style/Theme.Dialog" /> <!-- 스플래시 먼저 실행(intent-filter) -->
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

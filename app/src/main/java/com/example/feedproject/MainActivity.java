@@ -14,10 +14,16 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     Button bt_dog, bt_cat;
     public static Context mContext;
+    public static String val;
+
+    static public ArrayList<list_item> DataList;
+    static public ArrayList<list_item> searchList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
         mContext = this;
+
+        DataList = new ArrayList<list_item>();
+        searchList = new ArrayList<list_item>();
 
         if (!isConnected(mContext))
             Toast.makeText(getApplicationContext(), "네트워크가 연결되어 있지 않습니다.", Toast.LENGTH_LONG).show();
@@ -35,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         bt_dog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                val = "dog";
                 Intent intent = new Intent(getApplicationContext(), DogMainActivity.class);
                 startActivity(intent);
             }
@@ -43,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         bt_cat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                val = "cat";
                 Intent intent = new Intent(getApplicationContext(), CatMainActivity.class);
                 startActivity(intent);
             }
